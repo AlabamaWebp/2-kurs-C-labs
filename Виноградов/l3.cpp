@@ -5,27 +5,39 @@ using namespace std;
 class Calculator1
 {
 protected:
-    double a, b;
+    double *fields = new double();
+    double a()
+    {
+        return fields[0];
+    };
+    double b()
+    {
+        return fields[1];
+    };
 
 public:
-    Calculator1()
+    ~Calculator1() {
+        delete[] fields;
+        fields = nullptr;
+    }
+    void input()
     {
-        a = 0;
-        b = 0;
+        cout << "Введите число: ";
+        cin >> fields[0];
     }
     void inputFirst()
     {
         cout << "Введите первое число: ";
-        cin >> a;
+        cin >> fields[0];
     }
     void inputSecond()
     {
         cout << "Введите второе число: ";
-        cin >> b;
+        cin >> fields[1];
     }
-    void output() { cout << "A: " << a << " B: " << b << endl; }
-    double add() { return a + b; }
-    double subtract() { return a - b; }
+    void output() { cout << "A: " << a() << " B: " << b() << endl; }
+    double add() { return a() + b(); }
+    double subtract() { return a() - b(); }
     virtual void showOperations()
     {
         cout << "1. Сложение\n2. Вычитание\n3. Выход\n";
@@ -57,8 +69,8 @@ class Calculator2 : public Calculator1
 {
 public:
     Calculator2() : Calculator1() {}
-    double multiply() { return a * b; }
-    double divide() { return b != 0 ? a / b : 0; }
+    double multiply() { return a() * b(); }
+    double divide() { return b() != 0 ? a() / b() : 0; }
     void showOperations() override
     {
         cout << "1. Сложение\n2. Вычитание\n3. Умножение\n4. Деление\n5. Выход\n";
@@ -106,10 +118,10 @@ public:
     }
     void outputBinary()
     {
-        inputFirst();
-        cout << "Двоичный A: " << toBinary(static_cast<int>(a)) << endl;
-        inputSecond();
-        cout << "Двоичный B: " << toBinary(static_cast<int>(b)) << endl;
+        input();
+        cout << "Двоичный: " << toBinary(static_cast<int>(a())) << endl;
+        // inputSecond();
+        // cout << "Двоичный B: " << toBinary(static_cast<int>(b)) << endl;
     }
     void showOperations() override
     {
@@ -188,3 +200,8 @@ int main()
 
     return 0;
 }
+// 3. Запрограммировать базовый класс «калькулятор1»,
+// в котором определить методы арифметический операций «+»,«-».
+// Запрограммировать класс «калькулятор2», в котором определить методы арифметических операций «+»,«-», «/», «*».
+// Запрограммировать класс «калькулятор3», в котором определить методы арифметических операций «+»,«-», «/», «*»,
+// «Перевод в двоичную систему счисления».
