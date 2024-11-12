@@ -74,8 +74,12 @@ void printResults(Pentagon* pentagons, int count) {
 
 int main() {
     int n;
-    cout << "Введите количество пятиугольников: ";
+    cout << "Введите количество пятиугольников (от 1 до 100): ";
     cin >> n;
+    if (n < 1 || n > 100) {
+        cout << "Неверные данные";
+        return 0;
+    }
     Pentagon* pentagons = new Pentagon[n];
     inputPentagons(pentagons, n);
 
@@ -98,7 +102,6 @@ int main() {
     pentagons = nullptr;
     maxAreaPentagons = nullptr;
     maxPerimeterPentagons = nullptr;
-
 
     return 0;
 }
