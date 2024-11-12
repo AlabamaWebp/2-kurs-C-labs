@@ -74,8 +74,12 @@ void printResults(Pentagon* pentagons, int count) {
 
 int main() {
     int n;
-    cout << "Введите количество пятиугольников: ";
+    cout << "Введите количество пятиугольников (от 2 до 100): ";
     cin >> n;
+    if (n < 2 || n > 100) {
+        cout << "Условие не выполнено";
+        return 0;
+    }
     Pentagon* pentagons = new Pentagon[n];
     inputPentagons(pentagons, n);
 
@@ -86,10 +90,15 @@ int main() {
     findMaxAreaPentagons(pentagons, n, maxAreaPentagons, maxAreaCount);
     findMaxPerimeterPentagons(pentagons, n, maxPerimeterPentagons, maxPerimeterCount);
 
-    cout << "Максимальная площадь:\n";
-    printResults(maxAreaPentagons, maxAreaCount);
-    cout << "Максимальный периметр:\n";
-    printResults(maxPerimeterPentagons, maxPerimeterCount);
+    if (n == maxPerimeterCount) {
+        cout << "Больших нет";
+    }
+    else {
+        cout << "Максимальная площадь:\n";
+        printResults(maxAreaPentagons, maxAreaCount);
+        cout << "Максимальный периметр:\n";
+        printResults(maxPerimeterPentagons, maxPerimeterCount);
+    }
 
     delete[] pentagons;
     delete[] maxAreaPentagons;
