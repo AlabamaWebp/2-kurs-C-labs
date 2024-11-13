@@ -1,65 +1,72 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
-#include <vector>
-#include <sstream>
-#include <bitset>
 
 using namespace std;
-
-string summ_binary(string& bin1, string& bin2) {
-    bitset<32> b1(bin1);
-    bitset<32> b2(bin2);
-    bitset<32> result = b1.to_ulong() + b2.to_ulong();
-    return result.to_string();
-}
-
-vector<vector<string>> read_csv(string& filename) {
-    ifstream file(filename);
-    string line;
-    vector<vector<string>> data;
-    while (getline(file, line)) {
-        stringstream line_stream(line);
-        string cell;
-        vector<string> row;
-        while (getline(line_stream, cell, ',')) {
-            row.push_back(cell);
-        }
-        data.push_back(row);
+bool validate(string row)
+{
+    if (row.size() < 2 || row.size() > 16) return false;
+    for (int i = 0; i < row.size(); i++)
+    {
+        if (row[i] != '0'&& row[i] != '1')
+            return false;
     }
-    return data;
+    return true;
 }
-
-void write_csv(string& filename, vector<vector<string>>& data) {
-    ofstream file(filename);
-    for (auto& row : data) {
-        for (int i = 0; i < row.size(); ++i) {
-            file << row[i];
-            if (i != row.size() - 1) {
-                file << ",";
+void runTask(string filename1, string filename2)
+{
+    ifstream file1(filename1);
+    ofstream file2(filename2, ios::trunc);
+    if (!file1.is_open() || !file2.is_open())
+    {
+        cerr << "ERROR FILE OPEN!" << endl;
+        return;
+    }
+    string row;
+    string obr;
+    string dop;
+    while (getline(file1, row))
+    {
+        if (!validate(row))
+        {
+            file2 << row << ",ERROR" << endl;
+            continue;
+        }
+        obr = row;
+        if (row[0] == '1')
+        {
+            for (int i = 1; i < obr.size(); i++)
+            {
+                if (obr[i] == '0')
+                    obr[i] = '1';
+                else
+                    obr[i] = '0';
+            }
+            dop = obr;
+            for (int i = obr.size(); i > 1; i--)
+            {
+                if (obr[i] == '0')
+                {
+                    dop[i] = '1';
+                    break;
+                }
+                else
+                    dop[i] = '0';
             }
         }
-        file << "\n";
+        else
+            dop = row;
+        file2 << obr << "," << dop << endl;
+        file1.close();
+        file2.close();
     }
 }
 
-int main() {
+int main()
+{
     string input_file = "task1.csv";
-    string output_file = "result2_ivanov_variant.csv";
-
-    auto data = read_csv(input_file);
-
-    for (auto& row : data) {
-        try {
-            string bin1 = row[0];
-            string bin2 = row[1];
-            string result = summ_binary(bin1, bin2);
-            row.push_back(result);
-        } catch (const exception& e) {
-            row.push_back("Error: " + string(e.what()));
-        }
-    }
-
-    write_csv(output_file, data);
+    string output_file = "result2_eliseev_3.csv";
+    runTask(input_file, output_file);
     return 0;
 }
+
