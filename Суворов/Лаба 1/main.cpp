@@ -43,16 +43,21 @@ void runTask(string filename1, string filename2)
                     obr[i] = '0';
             }
             dop = obr;
+            bool noall = true;
             for (int i = obr.size(); i > 1; i--)
             {
                 if (obr[i] == '0')
                 {
                     dop[i] = '1';
+                    noall = false;
                     break;
                 }
                 else
                     dop[i] = '0';
             }
+            if (noall)
+                for (int i = 0; i < obr.size(); i++)
+                    dop[i] = '0';
         }
         else
             dop = row;

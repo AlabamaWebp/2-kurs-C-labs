@@ -60,6 +60,7 @@
     "iostream": "cpp",
     "fstream": "cpp",
     "iosfwd": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "bitset": "cpp"
   }
 }
