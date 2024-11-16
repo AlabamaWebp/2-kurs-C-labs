@@ -56,10 +56,10 @@ void runTask(string filename1, string filename2)
         }
         else
             dop = row;
-        file2 << obr << "," << dop << endl;
-        file1.close();
-        file2.close();
+        file2 << row << ","<< obr << "," << dop << endl;
     }
+    file1.close();
+    file2.close();
 }
 
 int main()
