@@ -7,9 +7,9 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Math Objects and Shapes");
 
     // Пример использования фигуры Треугольник
-    Triangle triangle(300, 200);
-    triangle.move(100, 100);
-    triangle.rotate(45);
+    // Triangle triangle(300, 200);
+    // triangle.move(100, 100);
+    // triangle.rotate(45);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -19,7 +19,6 @@ int main() {
         }
 
         window.clear();
-        triangle.draw();
         window.display();
     }
 
