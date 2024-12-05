@@ -5,13 +5,40 @@
 using namespace std;
 bool validate(string row)
 {
-    if (row.size() < 2 || row.size() > 16) return false;
+    if (row.size() < 2 || row.size() > 16)
+        return false;
     for (int i = 0; i < row.size(); i++)
     {
-        if (row[i] != '0'&& row[i] != '1')
+        if (row[i] != '0' && row[i] != '1')
             return false;
     }
     return true;
+}
+void transformate(string &row, string &obr, string &dop)
+{
+    for (int i = 1; i < obr.size(); i++)
+    {
+        if (obr[i] == '0')
+            obr[i] = '1';
+        else
+            obr[i] = '0';
+    }
+    dop = obr;
+    bool noall = true;
+    for (int i = obr.size(); i > 1; i--)
+    {
+        if (obr[i] == '0')
+        {
+            dop[i] = '1';
+            noall = false;
+            break;
+        }
+        else
+            dop[i] = '0';
+    }
+    if (noall)
+        for (int i = 0; i < obr.size(); i++)
+            dop[i] = '0';
 }
 void runTask(string filename1, string filename2)
 {
@@ -35,33 +62,11 @@ void runTask(string filename1, string filename2)
         obr = row;
         if (row[0] == '1')
         {
-            for (int i = 1; i < obr.size(); i++)
-            {
-                if (obr[i] == '0')
-                    obr[i] = '1';
-                else
-                    obr[i] = '0';
-            }
-            dop = obr;
-            bool noall = true;
-            for (int i = obr.size(); i > 1; i--)
-            {
-                if (obr[i] == '0')
-                {
-                    dop[i] = '1';
-                    noall = false;
-                    break;
-                }
-                else
-                    dop[i] = '0';
-            }
-            if (noall)
-                for (int i = 0; i < obr.size(); i++)
-                    dop[i] = '0';
+            transformate(row, obr, dop);
         }
         else
             dop = row;
-        file2 << row << ","<< obr << "," << dop << endl;
+        file2 << row << "," << obr << "," << dop << endl;
     }
     file1.close();
     file2.close();
@@ -74,4 +79,3 @@ int main()
     runTask(input_file, output_file);
     return 0;
 }
-
