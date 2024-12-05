@@ -56,7 +56,7 @@ void runTask(string filename1, string filename2)
     {
         if (!validate(row))
         {
-            file2 << row << ",ERROR" << endl;
+            file2 << row << ", ERROR" << endl;
             continue;
         }
         obr = row;
