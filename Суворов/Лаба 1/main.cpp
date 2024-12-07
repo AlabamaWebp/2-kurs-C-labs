@@ -56,7 +56,7 @@ void runTask(string filename1, string filename2)
     {
         if (!validate(row))
         {
-            file2 << row << ", ERROR" << endl;
+            file2 << row << ",ERROR" << endl;
             continue;
         }
         obr = row;
@@ -74,7 +74,7 @@ void runTask(string filename1, string filename2)
 
 int main()
 {
-    string input_file = "task1.csv";
+    string input_file = "si25_eliseev_task1.csv";
     string output_file = "result2_eliseev_3.csv";
     runTask(input_file, output_file);
     return 0;
