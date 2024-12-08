@@ -117,7 +117,7 @@ void runTask(string filename1)
     string row = "";
     string sym = "";
     string word = "";
-    string result = "";
+    // string result = "";
     string result1 = "";
     ofstream file2("answer21");
     while (getline(file1, row))
@@ -126,10 +126,10 @@ void runTask(string filename1)
         if (!validate(row) || tmp == '0')
         {
             cerr << "ERROR VALIDATE " << row << endl;
-            file2 << "ERROR VALIDATE on row" << row << endl;
+            file2 << "ERROR VALIDATE on row = " << row << endl;
             continue;
         }
-        result += tmp;
+        // result += tmp;
         if (tmp == 'B' || tmp == 'M')
         {
             word += charToMorse(sym);
@@ -147,7 +147,7 @@ void runTask(string filename1)
         else if (tmp != 'S')
             sym += tmp;
     }
-    cout << result << endl;
+    // cout << result << endl;
     cout << result1;
     file1.close();
     file2 << result1;
