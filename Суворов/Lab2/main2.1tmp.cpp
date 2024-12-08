@@ -85,7 +85,7 @@ int convert(char c) {
 }
 void generate_by_string(string str)
 {
-    ofstream file("test.csv", ios::trunc);
+    ofstream file("task21.csv", ios::trunc);
     if (!file.is_open())
     {
         cerr << "ERROR FILE OPEN111!" << endl;
@@ -109,7 +109,7 @@ void generate_by_string(string str)
         file << "0," << ((str[i + 1] != ' ') ? tire() : mesh_bukvi()) << endl;
         
     }
-    file << convert(tmp[size]) << ",0" << endl;
+    // file << convert(tmp[size]) << ",0" << endl;
     file.close();
 }
 

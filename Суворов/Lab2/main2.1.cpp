@@ -51,24 +51,30 @@ char charToMorse(string &c)
         {"TTTPP", '8'},
         {"TTTTP", '9'},
         {"TTTTT", '0'},
-        {"M", ' '}
-    };
+        {"M", ' '}};
     if (morse_code.count(c) > 0)
         return morse_code[c];
     return '-';
 }
 bool validate(string row)
 {
-    const short size = 11;
+    const short size = 10;
     bool er;
-    const char allowed[size] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','};
+    const char allowed[size] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i = 0; i < row.size(); i++)
     {
         er = true;
-        for (int j = 0; j < size; j++)
+        if (row[0] == '0' && row[1] == ',')
+            er = false;
+        else if (row[row.size() - 2] == ',' && row[row.size() - 1] == '0')
+            er = false;
+        else
         {
-            if (row[i] == allowed[j])
-                er = false;
+            for (int j = 0; j < size; j++)
+            {
+                if (row[i] == allowed[j])
+                    er = false;
+            }
         }
         if (er)
             return false;
@@ -131,13 +137,18 @@ void runTask(string filename1)
         if (!validate(row) || tmp == '0')
         {
             cerr << "ERROR VALIDATE " << row << endl;
-            break;
+            ofstream file2("answer21", ios::trunc);
+            file2 << "ERROR VALIDATE" << endl;
+            file2.close();
+            return;
         }
         result += tmp;
-        if (tmp == 'B' || tmp == 'M') {
+        if (tmp == 'B' || tmp == 'M')
+        {
             word += charToMorse(sym);
             sym = "";
-            if (tmp == 'M') {
+            if (tmp == 'M')
+            {
                 if (word == "COMMA")
                     word = ",";
                 else if (word == "DOT" || word == "POINT")
@@ -146,13 +157,14 @@ void runTask(string filename1)
                 word = "";
             }
         }
-        else if (tmp != 'S') sym += tmp;
+        else if (tmp != 'S')
+            sym += tmp;
     }
     cout << result << endl;
     cout << result1;
     file1.close();
 
-    ofstream file2("test2.csv", ios::trunc);
+    ofstream file2("answer21", ios::trunc);
     file2 << result << endl;
     file2 << result1;
     file2.close();
@@ -160,7 +172,7 @@ void runTask(string filename1)
 
 int main()
 {
-    string input_file = "test.csv";
+    string input_file = "task21.csv";
     runTask(input_file);
     return 0;
 }

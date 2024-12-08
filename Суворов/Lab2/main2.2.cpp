@@ -6,7 +6,7 @@ using namespace std;
 
 bool validate(string row)
 {
-    const short size = 12;
+    const short size = 10;
     bool er;
     const char allowed[size] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i = 0; i < row.size(); i++)
@@ -118,7 +118,7 @@ void runTask(string filename1)
     {
         if (!validate(row))
         {
-            cerr << "ERROR VALIDATE " << row << endl;
+            cerr << "ERROR VALIDATE " << endl;
             return;
         }
         time = row.substr(0, 5);
@@ -131,15 +131,15 @@ void runTask(string filename1)
             max_curiers = curiers;
     }
     file1.close();
-    cout << "Max curiers: " << max_curiers << endl;
-    ofstream file2("anser2.2", ios::trunc);
-    file2 << "Max curiers: " << max_curiers;
+    cout << "Min curiers: " << max_curiers << endl;
+    ofstream file2("answer22", ios::trunc);
+    file2 << "Min curiers: " << max_curiers;
     file2.close();
 }
 
 int main()
 {
-    string input_file = "test22.csv";
+    string input_file = "task22.csv";
     runTask(input_file);
     return 0;
 }
