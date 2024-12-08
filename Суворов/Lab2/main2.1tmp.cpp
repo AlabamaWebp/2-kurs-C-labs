@@ -73,10 +73,16 @@ string charToMorse(char c)
     }
     return "ERROR";
 }
+int convert(char c) {
+    if (c == 'P') {
+        return point();
+    }
+    return tire(); 
+}
 void generate_by_string(string str)
 {
     ofstream file("test.csv");
-    if (!file.is_open())
+    if (!file.is_open() || str.size() > 0)
     {
         cerr << "ERROR FILE OPEN!" << endl;
         return;
@@ -90,13 +96,14 @@ void generate_by_string(string str)
             tmp = charToMorse(str[i]);
             for (int j = 0; j < tmp.size() - 1; j++)
             {
-                file << (tmp[j] == 'P' ? point() : tire()) << ",0" << endl;
-                file << "0," << (tmp[j] == 'P' ? point() : tire()) << endl;
+                file << convert(tmp[j]) << ",0" << endl;
+                file << "0," << convert(tmp[j]) << endl;
             }
-            file << (tmp[tmp.size() - 1] == 'P' ? point() : tire()) << ",0" << endl;
-            file << "0," << (str[i + 1] != ' ' ? point() : tire()) << endl;
+            file << convert(tmp[tmp.size() - 1]) << ",0" << endl;
+            file << "0," << convert(str[i + 1]) << endl;
         }
     }
+    file << convert(tmp[size]) << ",0" << endl;
     file.close();
 }
 
