@@ -160,9 +160,7 @@ void runTask(string filename1)
 
 int main()
 {
-    // cout << endl << charToMorse(test) << endl;
     string input_file = "test.csv";
-    // string output_file = "test2.csv";
     runTask(input_file);
     return 0;
 }
