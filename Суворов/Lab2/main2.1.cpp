@@ -12,50 +12,50 @@ int tire()
 {
     return point() + point() + point();
 }
-string charToMorse(char c)
+char charToMorse(string &c)
 {
-    map<char, string> morse_code = {
-        {'A', "PT"},
-        {'B', "TPPP"},
-        {'C', "TPTP"},
-        {'D', "TPP"},
-        {'E', "P"},
-        {'F', "PPPT"},
-        {'G', "TT"},
-        {'H', "PPPP"},
-        {'I', "PP"},
-        {'J', "PTTT"},
-        {'K', "TPT"},
-        {'L', "PTPP"},
-        {'M', "TT"},
-        {'N', "TP"},
-        {'O', "TTT"},
-        {'P', "PTTP"},
-        {'Q', "TTP"},
-        {'R', "PTP"},
-        {'S', "PPP"},
-        {'T', "T"},
-        {'U', "PPT"},
-        {'V', "PPPT"},
-        {'W', "PTT"},
-        {'X', "TPPT"},
-        {'Y', "TPPTT"},
-        {'Z', "TTPP"},
-        {'1', "PTTTT"},
-        {'2', "PPTTT"},
-        {'3', "PPPTT"},
-        {'4', "PPPPT"},
-        {'5', "PPPPP"},
-        {'6', "TPPPP"},
-        {'7', "TTPPP"},
-        {'8', "TTPPP"},
-        {'9', "TTTPP"},
-        {'0', "TTTTP"},
-        {' ', "M"}};
-    c = toupper(c);
+    map<string, char> morse_code = {
+        {"PT", 'A'},
+        {"TPPP", 'B'},
+        {"TPTP", 'C'},
+        {"TPP", 'D'},
+        {"P", 'E'},
+        {"PPPT", 'F'},
+        {"TT", 'G'},
+        {"PPPP", 'H'},
+        {"PP", 'I'},
+        {"PTTT", 'J'},
+        {"TPT", 'K'},
+        {"PTPP", 'L'},
+        {"TT", 'M'},
+        {"TP", 'N'},
+        {"TTT", 'O'},
+        {"PTTP", 'P'},
+        {"TTP", 'Q'},
+        {"PTP", 'R'},
+        {"PPP", 'S'},
+        {"T", 'T'},
+        {"PPT", 'U'},
+        {"PPPT", 'V'},
+        {"PTT", 'W'},
+        {"TPPT", 'X'},
+        {"TPPTT", 'Y'},
+        {"TTPP", 'Z'},
+        {"PTTTT", '1'},
+        {"PPTTT", '2'},
+        {"PPPTT", '3'},
+        {"PPPPT", '4'},
+        {"PPPPP", '5'},
+        {"TPPPP", '6'},
+        {"TTPPP", '7'},
+        {"TTTPP", '8'},
+        {"TTTTP", '9'},
+        {"TTTTT", '0'},
+        {"M", ' '}
+    };
     if (morse_code.count(c) > 0)
         return morse_code[c];
-    return "ERROR";
+    return '-';
 }
 bool validate(string row)
 {
@@ -95,12 +95,12 @@ char transformate(string &row)
     int n = get_int_by_string(row, ispause);
     if (ispause)
     {
-        if (1120 < n && n < 1680)
-            return 'M'; // Между словом
         if (160 < n && n < 240)
-            return 'S'; // Между символом
+            return 'S'; // Между точкой или тире
         else if (480 < n && n < 720)
             return 'B'; // Между буквой
+        else if (1120 < n && n < 1680)
+            return 'M'; // Между словом
     }
     else
     {
@@ -119,28 +119,44 @@ void runTask(string filename1)
         cerr << "ERROR FILE OPEN!" << endl;
         return;
     }
-    string row;
-    string res = "";
+    char tmp;
+    string row = "";
+    string sym = "";
+    string word = "";
+    string result = "";
+    string result1 = "";
     while (getline(file1, row))
     {
-        if (!validate(row))
+        tmp = transformate(row);
+        if (!validate(row) || tmp == '0')
         {
-            // file2 << row << ",ERROR" << endl;
-            // continue;
-            cerr << "ERROR VALIDATE";
+            cerr << "ERROR VALIDATE " << row << endl;
             break;
         }
-        res += transformate(row);
+        result += tmp;
+        if (tmp == 'B' || tmp == 'M') {
+            word += charToMorse(sym);
+            sym = "";
+            if (tmp == 'M') {
+                result1 += word + ' ';
+                word = "";
+            }
+        }
+        else if (tmp != 'S') sym += tmp;
     }
-    cout << res;
+    cout << result << endl;
+    cout << result1;
     file1.close();
+
     ofstream file2("test2.csv", ios::trunc);
-    file2 << res;
+    file2 << result << endl;
+    file2 << result1;
     file2.close();
 }
 
 int main()
 {
+    // cout << endl << charToMorse(test) << endl;
     string input_file = "test.csv";
     // string output_file = "test2.csv";
     runTask(input_file);
