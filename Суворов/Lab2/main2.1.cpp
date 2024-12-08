@@ -51,12 +51,10 @@ string charToMorse(char c)
         {'8', "TTPPP"},
         {'9', "TTTPP"},
         {'0', "TTTTP"},
-        {' ', "P"}};
+        {' ', "M"}};
     c = toupper(c);
     if (morse_code.count(c) > 0)
-    {
         return morse_code[c];
-    }
     return "ERROR";
 }
 bool validate(string row)
@@ -77,16 +75,15 @@ bool validate(string row)
     }
     return true;
 }
-int get_int_by_string(string &row)
+int get_int_by_string(string &row, bool &ispause)
 {
     string tmp = "";
     if (row[0] != '0')
-    {
         for (int i = 0; i < row.size() - 2; i++)
             tmp += row[i];
-    }
     else
     {
+        ispause = true;
         for (int i = 2; i < row.size(); i++)
             tmp += row[i];
     }
@@ -94,15 +91,25 @@ int get_int_by_string(string &row)
 }
 char transformate(string &row)
 {
-    int n = get_int_by_string(row);
-    if (160 < n && n < 240)
-        return 'P';
-    else if (580 < n && n < 720)
-        return 'T';
-    else if (1120 < n && n < 1680)
-        return ' ';
+    bool ispause = false;
+    int n = get_int_by_string(row, ispause);
+    if (ispause)
+    {
+        if (1120 < n && n < 1680)
+            return 'M'; // Между словом
+        if (160 < n && n < 240)
+            return 'S'; // Между символом
+        else if (480 < n && n < 720)
+            return 'B'; // Между буквой
+    }
     else
-        return 'E';
+    {
+        if (160 < n && n < 240)
+            return 'P'; // Точка
+        else if (480 < n && n < 720)
+            return 'T'; // tire
+    }
+    return '0';
 }
 void runTask(string filename1)
 {
@@ -127,8 +134,9 @@ void runTask(string filename1)
     }
     cout << res;
     file1.close();
-    // ofstream file2(filename2, ios::trunc);
-    // file2.close();
+    ofstream file2("test2.csv", ios::trunc);
+    file2 << res;
+    file2.close();
 }
 
 int main()

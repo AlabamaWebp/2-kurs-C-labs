@@ -95,6 +95,8 @@ void generate_by_string(string str)
     string tmp;
     for (int i = 0; i < size; i++)
     {
+        if (str[i] == ' ') continue;   
+         
         tmp = charToMorse(str[i]);
         size_tmp = tmp.size() - 1;
         for (int j = 0; j < size_tmp; j++)
