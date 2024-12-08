@@ -7,7 +7,7 @@ using namespace std;
 // ofstream file("test.csv");
 int point()
 {
-    return rand() % 20 + 200;
+    return rand() % 80 + 160;
 }
 // int point(bool son = false)
 // {
@@ -65,7 +65,7 @@ string charToMorse(char c)
         {'8', "TTPPP"},
         {'9', "TTTPP"},
         {'0', "TTTTP"},
-        {' ', "P"}};
+        {' ', "M"}};
     c = toupper(c);
     if (morse_code.count(c) > 0)
     {
@@ -77,31 +77,35 @@ int convert(char c) {
     if (c == 'P') {
         return point();
     }
-    return tire(); 
+    else if (c == 'T') {
+        return tire();
+    }
+    return mesh_bukvi(); 
 }
 void generate_by_string(string str)
 {
-    ofstream file("test.csv");
-    if (!file.is_open() || str.size() > 0)
+    ofstream file("test.csv", ios::trunc);
+    if (!file.is_open())
     {
-        cerr << "ERROR FILE OPEN!" << endl;
+        cerr << "ERROR FILE OPEN111!" << endl;
         return;
     }
     const int size = str.size() - 1;
+    int size_tmp;
     string tmp;
     for (int i = 0; i < size; i++)
     {
-        if (str[i] != ' ')
+        tmp = charToMorse(str[i]);
+        size_tmp = tmp.size() - 1;
+        for (int j = 0; j < size_tmp; j++)
         {
-            tmp = charToMorse(str[i]);
-            for (int j = 0; j < tmp.size() - 1; j++)
-            {
-                file << convert(tmp[j]) << ",0" << endl;
-                file << "0," << convert(tmp[j]) << endl;
-            }
-            file << convert(tmp[tmp.size() - 1]) << ",0" << endl;
-            file << "0," << convert(str[i + 1]) << endl;
-        }
+            file << convert(tmp[j]) << ",0" << endl;
+            file << "0," << convert(tmp[j]) << endl;
+        } // все кроме последней
+        // последнюю отдельно для определения паузы 
+        file << convert(tmp[size_tmp]) << ",0" << endl;
+        file << "0," << ((str[i + 1] != ' ') ? tire() : mesh_bukvi()) << endl;
+        
     }
     file << convert(tmp[size]) << ",0" << endl;
     file.close();
