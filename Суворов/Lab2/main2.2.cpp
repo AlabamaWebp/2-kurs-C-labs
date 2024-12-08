@@ -8,14 +8,21 @@ bool validate(string row)
 {
     const short size = 12;
     bool er;
-    const char allowed[size] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', ':'};
+    const char allowed[size] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     for (int i = 0; i < row.size(); i++)
     {
         er = true;
-        for (int j = 0; j < size; j++)
+        if (i == 2 && row[i] == ':')
+            er = false;
+        else if (i == 5 && row[i] == ',')
+            er = false;
+        else
         {
-            if (row[i] == allowed[j])
-                er = false;
+            for (int j = 0; j < size; j++)
+            {
+                if (row[i] == allowed[j])
+                    er = false;
+            }
         }
         if (er)
             return false;
@@ -115,10 +122,9 @@ void runTask(string filename1)
             return;
         }
         time = row.substr(0, 5);
-        list.remove_if([&time](string &s) {
-            return compare(time, s);
-        });
-        
+        list.remove_if([&time](string &s)
+                       { return compare(time, s); });
+
         list.push_back(dostav2(row));
         curiers = list.size();
         if (curiers > max_curiers)
