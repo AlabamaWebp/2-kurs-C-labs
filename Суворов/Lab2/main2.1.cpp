@@ -95,18 +95,18 @@ char transformate(string &row)
     int n = get_int_by_string(row, ispause);
     if (ispause)
     {
-        if (160 < n && n < 240)
+        if (159 < n && n < 241)
             return 'S'; // Между точкой или тире
-        else if (480 < n && n < 720)
+        else if (479 < n && n < 721)
             return 'B'; // Между буквой
-        else if (1120 < n && n < 1680)
+        else if (1119 < n && n < 1681)
             return 'M'; // Между словом
     }
     else
     {
-        if (160 < n && n < 240)
+        if (159 < n && n < 241)
             return 'P'; // Точка
-        else if (480 < n && n < 720)
+        else if (479 < n && n < 721)
             return 'T'; // tire
     }
     return '0';
@@ -138,6 +138,10 @@ void runTask(string filename1)
             word += charToMorse(sym);
             sym = "";
             if (tmp == 'M') {
+                if (word == "COMMA")
+                    word = ",";
+                else if (word == "DOT" || word == "POINT")
+                    word = ".";
                 result1 += word + ' ';
                 word = "";
             }

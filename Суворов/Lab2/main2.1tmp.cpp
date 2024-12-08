@@ -115,7 +115,7 @@ void generate_by_string(string str)
 
 int main()
 {
-    string str = "twenty three point five centigrade comma clear";
+    string str = "twenty three point five centigrade comma clear 55 comma 3 ";
     generate_by_string(str);
     return 0;
 }
