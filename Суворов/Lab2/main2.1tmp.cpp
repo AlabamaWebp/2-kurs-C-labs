@@ -35,7 +35,7 @@ string charToMorse(char c)
         {'D', "TPP"},
         {'E', "P"},
         {'F', "PPPT"},
-        {'G', "TT"},
+        {'G', "TTP"},
         {'H', "PPPP"},
         {'I', "PP"},
         {'J', "PTTT"},
@@ -45,7 +45,7 @@ string charToMorse(char c)
         {'N', "TP"},
         {'O', "TTT"},
         {'P', "PTTP"},
-        {'Q', "TTP"},
+        {'Q', "TTPT"},
         {'R', "PTP"},
         {'S', "PPP"},
         {'T', "T"},
@@ -53,7 +53,7 @@ string charToMorse(char c)
         {'V', "PPPT"},
         {'W', "PTT"},
         {'X', "TPPT"},
-        {'Y', "TPPTT"},
+        {'Y', "TPTT"},
         {'Z', "TTPP"},
         {'1', "PTTTT"},
         {'2', "PPTTT"},
@@ -66,6 +66,7 @@ string charToMorse(char c)
         {'9', "TTTPP"},
         {'0', "TTTTP"},
         {' ', "M"}};
+        // twenty three point five centigrade comma clear
     c = toupper(c);
     if (morse_code.count(c) > 0)
     {
@@ -96,13 +97,12 @@ void generate_by_string(string str)
     for (int i = 0; i < size; i++)
     {
         if (str[i] == ' ') continue;   
-         
         tmp = charToMorse(str[i]);
         size_tmp = tmp.size() - 1;
         for (int j = 0; j < size_tmp; j++)
         {
             file << convert(tmp[j]) << ",0" << endl;
-            file << "0," << convert(tmp[j]) << endl;
+            file << "0," << point() << endl;
         } // все кроме последней
         // последнюю отдельно для определения паузы 
         file << convert(tmp[size_tmp]) << ",0" << endl;
