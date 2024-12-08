@@ -4,14 +4,6 @@
 #include <map>
 using namespace std;
 
-int point()
-{
-    return rand() % 20 + 200;
-}
-int tire()
-{
-    return point() + point() + point();
-}
 char charToMorse(string &c)
 {
     map<string, char> morse_code = {
@@ -20,7 +12,7 @@ char charToMorse(string &c)
         {"TPTP", 'C'},
         {"TPP", 'D'},
         {"P", 'E'},
-        {"PPPT", 'F'},
+        {"PPTP", 'F'},
         {"TTP", 'G'},
         {"PPPP", 'H'},
         {"PP", 'I'},
@@ -69,13 +61,9 @@ bool validate(string row)
         else if (row[row.size() - 2] == ',' && row[row.size() - 1] == '0')
             er = false;
         else
-        {
             for (int j = 0; j < size; j++)
-            {
                 if (row[i] == allowed[j])
                     er = false;
-            }
-        }
         if (er)
             return false;
     }
@@ -101,18 +89,18 @@ char transformate(string &row)
     int n = get_int_by_string(row, ispause);
     if (ispause)
     {
-        if (159 < n && n < 241)
+        if (180 <= n && n <= 220)
             return 'S'; // Между точкой или тире
-        else if (479 < n && n < 721)
+        else if (540 <= n && n <= 660)
             return 'B'; // Между буквой
-        else if (1119 < n && n < 1681)
+        else if (1260 <= n && n <= 1540)
             return 'M'; // Между словом
     }
     else
     {
-        if (159 < n && n < 241)
+        if (180 <= n && n <= 220)
             return 'P'; // Точка
-        else if (479 < n && n < 721)
+        else if (540 <= n && n <= 660)
             return 'T'; // tire
     }
     return '0';
@@ -131,16 +119,15 @@ void runTask(string filename1)
     string word = "";
     string result = "";
     string result1 = "";
+    ofstream file2("answer21");
     while (getline(file1, row))
     {
         tmp = transformate(row);
         if (!validate(row) || tmp == '0')
         {
             cerr << "ERROR VALIDATE " << row << endl;
-            ofstream file2("answer21", ios::trunc);
-            file2 << "ERROR VALIDATE" << endl;
-            file2.close();
-            return;
+            file2 << "ERROR VALIDATE on row" << row << endl;
+            continue;
         }
         result += tmp;
         if (tmp == 'B' || tmp == 'M')
@@ -163,9 +150,6 @@ void runTask(string filename1)
     cout << result << endl;
     cout << result1;
     file1.close();
-
-    ofstream file2("answer21", ios::trunc);
-    file2 << result << endl;
     file2 << result1;
     file2.close();
 }
