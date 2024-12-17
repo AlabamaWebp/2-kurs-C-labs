@@ -222,11 +222,11 @@ public:
 class Vector : public MathObject
 {
 private:
-    int size;
+    int size = 3;
     double *data;
 
 public:
-    Vector(int size) : size(size)
+    Vector() // : size(size)
     {
         data = new double[size];
         for (int i = 0; i < size; ++i)
@@ -264,10 +264,14 @@ public:
             return nullptr;
         }
         Vector *result = new Vector(size);
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < size; i++)
         {
-            result->data[i] = data[i] - other.data[i];
+            result->data[i]
         }
+        // векторное произведение
+        result->data[0] = data[1] * other.data[2] - data[2] * other.data[1];
+        result->data[1] = data[2] * other.data[0] - data[0] * other.data[2];
+        result->data[2] = data[0] * other.data[1] - data[0] * other.data[1];
         return result;
     }
 
@@ -279,19 +283,10 @@ public:
             cerr << "Ошибка: Размеры векторов должны совпадать для умножения" << endl;
             return nullptr;
         }
-        double res; // скалярное произведение
+        Vector *result = new Vector(size);
         for (int i = 0; i < size; i++)
-        {
-            res += data[i] * other.data[i];
-        }
-        cout << res << endl;
-        return nullptr;
-        // Vector *result = new Vector(size);
-        // for (int i = 0; i < size; i++)
-        // {
-        //     result->data[i] = data[i] * other.data[i];
-        // }
-        // return result;
+            result->data[i] = data[i] * other.data[i];
+        return result;
     }
 
     MathObject *multiply(double num) override
@@ -646,8 +641,8 @@ void showObjectMenu(int choice)
         two = new Polynomial(3);
         break;
     case 3:
-        one = new Vector(3);
-        two = new Vector(3);
+        one = new Vector();
+        two = new Vector();
         break;
     case 4:
         one = new Fraction();
