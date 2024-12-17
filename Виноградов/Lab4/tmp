@@ -1,0 +1,112 @@
+
+void showObjectMenu(int choice) {
+    MathObject *one;
+    MathObject *two;
+    MathObject *tmp;
+    int choice55;
+    switch (choice) {
+        case 1:
+            one = new Matrix(3,3);
+            two = new Matrix(3,3);
+            break;
+        case 2:
+            one = new Polynomial(3);
+            two = new Polynomial(3);
+            break;
+        case 3:
+            one = new Vector(3);
+            two = new Vector(3);
+            break;
+        case 4:
+            one = new Fraction();
+            two = new Fraction();
+            break;
+        case 5:
+            one = new Complex();
+            two = new Complex();
+            break;
+        default:
+            break;
+    }
+    while (true) {
+        cout << "Выберите операцию:\n";
+        cout << "1. Сложение\n";
+        cout << "2. Вычитание\n";
+        cout << "3. Умножение на объект\n";
+        cout << "4. Умножение на число\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        int operationChoice;
+        cin >> operationChoice;
+
+        switch (operationChoice) {
+        case 1:
+            tmp = one.add(two);
+            tmp.toString();
+            break;
+        case 2:
+            tmp = one.subtract(two);
+            tmp.toString();
+            break;
+        case 3:
+            tmp = one.multiply(two);
+            tmp.toString();
+            break;
+        case 4:
+            cout << "Введите число на которое умножить объект: ";
+            cin >> choice55;
+            tmp = one.multiply(choice55);
+            tmp.toString();
+            break;
+        case 6:
+            return;
+        default:
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+void showMathObjectMenu() {
+    int choice;
+    while (true) {
+        cout << "Выберите математический объект:\n";
+        cout << "1. Матрица\n";
+        cout << "2. Полином\n";
+        cout << "3. Вектор\n";
+        cout << "4. Дробь\n";
+        cout << "5. Комплексное число\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+
+        if (choice >= 1 && choice <= 5) {
+            showObjectMenu(choice);
+        } else if (choice == 6) {
+            return;
+        } else {
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+void menu() {
+    int choice;
+    while (true) {
+        cout << "Выберите действие:\n";
+        cout << "1. Математические объекты\n";
+        cout << "2. Выход\n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            showMathObjectMenu();
+        } else if (choice == 2) {
+            cout << "Выход...\n";
+            return;
+        } else {
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+int main() {
+    menu();
+    return 0;
+}

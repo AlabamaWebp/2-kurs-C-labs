@@ -15,7 +15,7 @@ public:
 };
 int get_rand()
 {
-    return rand() % 51;
+    return rand() % 50 + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,24 +305,15 @@ private:
     int numerator;
     int denominator;
 
-    // int gcd(int a, int b)
-    // {
-    //     return b == 0 ? a : gcd(b, a % b);
-    // }
-
-    // void reduce()
-    // {
-    //     int divisor = gcd(numerator, denominator);
-    //     numerator /= divisor;
-    //     denominator /= divisor;
-    // }
-
 public:
     Fraction(int numerator, int denominator) : numerator(numerator), denominator(denominator)
     {
         if (denominator == 0)
             cerr << "Ошибка: знаменатель не может быть равен нулю" << endl;
-        // reduce();
+    }
+    Fraction() {
+        numerator = get_rand();
+        denominator = get_rand();
     }
 
     MathObject *add(MathObject &obj) override
@@ -374,6 +365,10 @@ public:
         real = real1;
         imag = imag1;
     }
+    Complex() {
+        real = get_rand();
+        imag = get_rand();
+    }
 
     MathObject *add(MathObject &obj) override
     {
@@ -405,6 +400,72 @@ public:
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void showObjectMenu(int choice) {
+    MathObject *one;
+    MathObject *two;
+    MathObject *tmp;
+    int choice55;
+    switch (choice) {
+        case 1:
+            one = new Matrix(3,3);
+            two = new Matrix(3,3);
+            break;
+        case 2:
+            one = new Polynomial(3);
+            two = new Polynomial(3);
+            break;
+        case 3:
+            one = new Vector(3);
+            two = new Vector(3);
+            break;
+        case 4:
+            one = new Fraction();
+            two = new Fraction();
+            break;
+        case 5:
+            one = new Complex();
+            two = new Complex();
+            break;
+        default:
+            break;
+    }
+    cout << "Объект 1. " << endl << one->toString() << endl << "Объект 2. " << endl << two->toString() << endl;
+    while (true) {
+        cout << "Выберите операцию:\n";
+        cout << "1. Сложение\n";
+        cout << "2. Вычитание\n";
+        cout << "3. Умножение на объект\n";
+        cout << "4. Умножение на число\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        int operationChoice;
+        cin >> operationChoice;
+        tmp = nullptr;
+        switch (operationChoice) {
+        case 1:
+            tmp = one->add(*two);
+            break;
+        case 2:
+            tmp = one->subtract(*two);
+            break;
+        case 3:
+            tmp = one->multiply(*two);
+            break;
+        case 4:
+            cout << "Введите число на которое умножить объект: ";
+            cin >> choice55;
+            tmp = one->multiply(choice55);
+            break;
+        case 6:
+            return;
+        default:
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+        if (tmp != nullptr) {
+            cout << tmp->toString() << endl;
+        }
+    }
+}
 void showMathObjectMenu() {
     int choice;
     while (true) {
@@ -423,48 +484,6 @@ void showMathObjectMenu() {
         } else if (choice == 6) {
             return;
         } else {
-            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
-        }
-    }
-}
-
-void showObjectMenu(int choice) {
-    while (true) {
-        cout << "Выберите операцию:\n";
-        cout << "1. Сложение\n";
-        cout << "2. Вычитание\n";
-        cout << "3. Умножение на объект\n";
-        cout << "4. Умножение на число\n";
-        cout << "5. Показать объект\n";
-        cout << "6. Выход\n";
-        cout << "Ваш выбор: ";
-        int operationChoice;
-        cin >> operationChoice;
-
-        switch (operationChoice) {
-        case 1:
-            // Логика сложения
-            cout << "Выполняется сложение...\n";
-            break;
-        case 2:
-            // Логика вычитания
-            cout << "Выполняется вычитание...\n";
-            break;
-        case 3:
-            // Логика умножения на объект
-            cout << "Выполняется умножение на объект...\n";
-            break;
-        case 4:
-            // Логика умножения на число
-            cout << "Выполняется умножение на число...\n";
-            break;
-        case 5:
-            // Логика отображения объекта
-            cout << "Отображение объекта...\n";
-            break;
-        case 6:
-            return;
-        default:
             cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
         }
     }
