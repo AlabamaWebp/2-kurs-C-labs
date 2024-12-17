@@ -15,7 +15,7 @@ public:
         data = new int *[rows];
         for (int i = 0; i < rows; ++i) {
             data[i] = new int[cols]();
-            for (int j = 0; j < count; j++)
+            for (int j = 0; j < cols; j++)
                 data[i][j] = rand() % 10;
         }
     }
@@ -26,17 +26,6 @@ public:
             delete[] data[i];
         delete[] data;
     }
-
-    // void input()
-    // {
-    //     for (int i = 0; i < rows; ++i)
-    //     {
-    //         for (int j = 0; j < cols; ++j)
-    //         {
-    //             cin >> data[i][j];
-    //         }
-    //     }
-    // }
 
     void display()
     {
@@ -54,22 +43,13 @@ public:
     {
         int **transposed = new int *[cols];
         for (int i = 0; i < cols; ++i)
-        {
             transposed[i] = new int[rows];
-        }
-
         for (int i = 0; i < rows; ++i)
-        {
             for (int j = 0; j < cols; ++j)
-            {
                 transposed[j][i] = data[i][j];
-            }
-        }
 
         for (int i = 0; i < rows; ++i)
-        {
             delete[] data[i];
-        }
         delete[] data;
 
         data = transposed;
@@ -79,23 +59,19 @@ public:
     void reverseColumns()
     {
         for (int i = 0; i < rows; ++i)
-        {
             for (int j = 0; j < cols / 2; ++j)
-            {
                 swap(data[i][j], data[i][cols - j - 1]);
-            }
-        }
     }
 
     void sortRows()
     {
         for (int i = 0; i < rows; ++i)
         {
-            for (int j = 0; j < cols - 1; ++j)
+            for (int j = 0; j < cols; ++j)
             {
-                for (int k = j + 1; k < cols; ++k)
+                for (int k = 0; k < cols - 1; ++k)
                 {
-                    if (data[i][j] > data[i][k])
+                    if (data[i][k] > data[i][k+1])
                     {
                         swap(data[i][j], data[i][k]);
                     }
@@ -104,7 +80,7 @@ public:
         }
     }
 
-    void rotateClockwise()
+    void rotatePoChasovoi()
     {
         transpose();
         reverseColumns();
@@ -115,8 +91,6 @@ int main()
 {
     int rows = 2, cols = 2;
     Matrix matrix(rows, cols);
-    cout << "Введите элементы матрицы 2x2:" << endl;
-    matrix.input();
 
     cout << "Исходная матрица:" << endl;
     matrix.display();
@@ -140,7 +114,7 @@ int main()
             matrix.display();
             break;
         case 2:
-            matrix.rotateClockwise();
+            matrix.rotatePoChasovoi();
             cout << "Матрица после поворота:" << endl;
             matrix.display();
             break;

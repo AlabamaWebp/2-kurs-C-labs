@@ -107,14 +107,14 @@ public:
         return result;
     }
 
-    MathObject *multiply(double scalar) override
+    MathObject *multiply(double num) override
     {
         Matrix *result = new Matrix(rows, cols);
         for (int i = 0; i < rows; ++i)
         {
             for (int j = 0; j < cols; ++j)
             {
-                result->data[i][j] = data[i][j] * scalar;
+                result->data[i][j] = data[i][j] * num;
             }
         }
         return result;
@@ -123,9 +123,9 @@ public:
     string toString() override
     {
         string result;
-        for (int i = 0; i < rows; ++i)
+        for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < cols; ++j)
+            for (int j = 0; j < cols; j++)
             {
                 result += to_string(data[i][j]) + " ";
             }
@@ -197,12 +197,12 @@ public:
         return result;
     }
 
-    MathObject *multiply(double scalar) override
+    MathObject *multiply(double num) override
     {
         Polynomial *result = new Polynomial(stepen);
         for (int i = 0; i <= stepen; ++i)
         {
-            result->coefficients[i] = coefficients[i] * scalar;
+            result->coefficients[i] = coefficients[i] * num;
         }
         return result;
     }
@@ -273,27 +273,33 @@ public:
 
     MathObject *multiply(MathObject &obj) override
     {
-
         Vector &other = dynamic_cast<Vector &>(obj);
         if (size != other.size)
         {
             cerr << "Ошибка: Размеры векторов должны совпадать для умножения" << endl;
             return nullptr;
         }
-        Vector *result = new Vector(size);
+        double res; // скалярное произведение
         for (int i = 0; i < size; i++)
         {
-            result->data[i] = data[i] * other.data[i];
+            res += data[i] * other.data[i];
         }
-        return result;
+        cout << res << endl;
+        return nullptr;
+        // Vector *result = new Vector(size);
+        // for (int i = 0; i < size; i++)
+        // {
+        //     result->data[i] = data[i] * other.data[i];
+        // }
+        // return result;
     }
 
-    MathObject *multiply(double scalar) override
+    MathObject *multiply(double num) override
     {
         Vector *result = new Vector(size);
         for (int i = 0; i < size; ++i)
         {
-            result->data[i] = data[i] * scalar;
+            result->data[i] = data[i] * num;
         }
         return result;
     }
@@ -352,9 +358,9 @@ public:
         return new Fraction(newNumerator, newDenominator);
     }
 
-    MathObject *multiply(double scalar) override
+    MathObject *multiply(double num) override
     {
-        int newNumerator = numerator * scalar;
+        int newNumerator = numerator * num;
         return new Fraction(newNumerator, denominator);
     }
 
@@ -397,9 +403,9 @@ public:
         return new Complex(a * other.a - b * other.b, a * other.b + b * other.a);
     }
 
-    MathObject *multiply(double scalar) override
+    MathObject *multiply(double num) override
     {
-        return new Complex(a * scalar, b * scalar);
+        return new Complex(a * num, b * num);
     }
 
     string toString() override
