@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-const int MAX_SIZE = 100;
 
 class Node
 {
@@ -16,6 +15,7 @@ class LinkedList
 private:
     Node *head;
     int size;
+    const int MAX_SIZE = 100;
 
     void checkIndex(int index)
     {
