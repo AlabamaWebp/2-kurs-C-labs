@@ -93,7 +93,7 @@ void printMenu()
     cout << "3. Удалить элемент из конца\n";
     cout << "4. Получить элемент по индексу\n";
     cout << "5. Вывести размер вектора\n";
-    cout << "6. Вывести все элементы вектора\n";
+    cout << "6. Вывести все элементы\n";
     cout << "7. Выйти\n";
 }
 
@@ -101,7 +101,6 @@ int main()
 {
     Vector vec;
     int choice;
-    int value;
     int index;
 
     while (true)

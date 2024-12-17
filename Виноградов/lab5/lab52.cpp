@@ -1,6 +1,11 @@
 #include <iostream>
 using namespace std;
 
+int get_rand()
+{
+    return rand() % 50 + 1;
+}
+
 class Node
 {
 public:
@@ -64,16 +69,12 @@ public:
         }
         Node *newNode = new Node(value);
         if (head == nullptr)
-        {
             head = newNode;
-        }
         else
         {
             Node *current = head;
             while (current->next != nullptr)
-            {
                 current = current->next;
-            }
             current->next = newNode;
         }
         ++size;
@@ -116,6 +117,17 @@ public:
         }
         --size;
     }
+
+    void showAll()
+    {
+        Node *current = head;
+        for (int i = 0; i < size; i++)
+        {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
 };
 
 void printMenu()
@@ -126,14 +138,14 @@ void printMenu()
     cout << "3. Удалить элемент из конца\n";
     cout << "4. Получить элемент по индексу\n";
     cout << "5. Вывести размер списка\n";
-    cout << "6. Выйти\n";
+    cout << "6. Вывести все элементы\n";
+    cout << "7. Выйти\n";
 }
 
 int main()
 {
     LinkedList list;
     int choice;
-    int value;
     int index;
 
     while (true)
@@ -144,11 +156,9 @@ int main()
         switch (choice)
         {
         case 1:
-            cout << "Введите значение для добавления: ";
-            cin >> value;
             try
             {
-                list.add(value);
+                list.add(get_rand());
                 cout << "Элемент добавлен.\n";
             }
             catch (const exception &e)
@@ -194,6 +204,9 @@ int main()
             cout << "Текущий размер списка: " << list.getSize() << endl;
             break;
         case 6:
+            list.showAll();
+            break;
+        case 7:
             return 0;
         default:
             cerr << "Ошибка: неверный выбор\n";
