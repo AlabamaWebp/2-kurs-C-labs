@@ -1,5 +1,4 @@
 #include <iostream>
-#include <sstream>
 #include <cmath>
 using namespace std;
 
@@ -10,11 +9,11 @@ private:
     void validateSides() {
         if (a <= 0 || b <= 0 || c <= 0) {
             cerr << "Ошибка: сторона не может быть нулевой или отрицательной" << endl;
-            throw logic_error("Стороны должны быть положительными числами");
+            throw invalid_argument("Стороны должны быть положительными числами");
         }
         if (a + b <= c || a + c <= b || b + c <= a) {
             cerr << "Ошибка: невозможно создать треугольник с такими сторонами" << endl;
-            throw logic_error("Несуществующий треугольник");
+            throw invalid_argument("Несуществующий треугольник");
         }
     }
 
@@ -23,27 +22,20 @@ public:
         validateSides();
     }
 
-    ~Triangle() {}
-
-    // Метод преобразования в вещественное число (площадь треугольника)
-    operator double() {
+    double area() {
         double s = (a + b + c) / 2;
         return sqrt(s * (s - a) * (s - b) * (s - c));
     }
 
-    // Метод преобразования в символьную строку
-    operator string() {
-        stringstream ss;
-        ss << "Triangle(" << a << ", " << b << ", " << c << ")";
-        return ss.str();
+    string toString() {
+        return "Triangle(" + to_string(a) + ", " + to_string(b) + ", " + to_string(c) + ")";
     }
 
-    // Метод получения объекта-треугольника из строки
-    static Triangle fromString(const string& str) {
+    Triangle fromString(const string& str) {
         double sideA, sideB, sideC;
         if (sscanf(str.c_str(), "Triangle(%lf, %lf, %lf)", &sideA, &sideB, &sideC) != 3) {
             cerr << "Ошибка: неправильный формат строки" << endl;
-            throw logic_error("Неправильный формат строки");
+            throw invalid_argument("Неправильный формат строки");
         }
         return Triangle(sideA, sideB, sideC);
     }
@@ -75,7 +67,7 @@ int main() {
                 try {
                     delete t;
                     t = new Triangle(a, b, c);
-                    cout << "Треугольник создан: " << string(*t) << endl;
+                    cout << "Треугольник создан: " << t->toString() << endl;
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
                     t = nullptr;
@@ -83,14 +75,14 @@ int main() {
                 break;
             case 2:
                 if (t) {
-                    cout << "Информация о треугольнике: " << string(*t) << endl;
+                    cout << "Информация о треугольнике: " << t->toString() << endl;
                 } else {
                     cerr << "Треугольник не создан\n";
                 }
                 break;
             case 3:
                 if (t) {
-                    cout << "Площадь треугольника: " << double(*t) << endl;
+                    cout << "Площадь треугольника: " << t->area() << endl;
                 } else {
                     cerr << "Треугольник не создан\n";
                 }
@@ -102,7 +94,7 @@ int main() {
                 try {
                     delete t;
                     t = Triangle::fromString(str);
-                    cout << "Треугольник создан из строки: " << string(*t) << endl;
+                    cout << "Треугольник создан из строки: " << t->toString() << endl;
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
                     t = nullptr;
@@ -116,6 +108,5 @@ int main() {
                 break;
         }
     }
-
     return 0;
 }
