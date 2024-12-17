@@ -8,7 +8,7 @@ private:
 
     void validateSides() {
         if (a <= 0 || b <= 0 || c <= 0) {
-            cerr << "Ошибка: сторона не может быть нулевой или отрицательной" << endl;
+            cerr << "Ошибка: сторона должна быть > 0" << endl;
             throw invalid_argument("Стороны должны быть положительными числами");
         }
         if (a + b <= c || a + c <= b || b + c <= a) {
@@ -18,36 +18,32 @@ private:
     }
 
 public:
-    Triangle(double sideA, double sideB, double sideC) : a(sideA), b(sideB), c(sideC) {
-        validateSides();
-    }
 
-    double area() {
+    operator double() {
         double s = (a + b + c) / 2;
         return sqrt(s * (s - a) * (s - b) * (s - c));
     }
 
-    string toString() {
-        return "Triangle(" + to_string(a) + ", " + to_string(b) + ", " + to_string(c) + ")";
+    operator string() {
+        return "Треугольник со сторонами " + to_string(a) + ", " + to_string(b) + ", " + to_string(c);
     }
 
     Triangle(string& str) {
-        double sideA, sideB, sideC;
-        if (sscanf(str.c_str(), "Triangle(%lf, %lf, %lf)", &sideA, &sideB, &sideC) != 3) {
+        cout << str << endl;
+        if (sscanf(str.c_str(), "%lf,%lf,%lf", &a, &b, &c) != 3) {
             cerr << "Ошибка: неправильный формат строки" << endl;
             throw invalid_argument("Неправильный формат строки");
         }
-        // return Triangle(sideA, sideB, sideC);
+        validateSides();
     }
 };
 
 void printMenu() {
     cout << "Выберите действие:\n";
-    cout << "1. Создать треугольник\n";
-    cout << "2. Создать треугольник из строки\n";
-    cout << "3. Показать информацию о треугольнике\n";
+    cout << "1. Создать треугольник из строки\n";
+    cout << "2. Показать информацию о треугольнике\n";
     cout << "4. Вычислить площадь треугольника\n";
-    cout << "5. Выйти\n";
+    cout << "0. Выйти\n";
 }
 
 int main() {
@@ -62,44 +58,33 @@ int main() {
 
         switch (choice) {
             case 1:
-                cout << "Введите стороны треугольника (a,b,c): ";
-                cin >> a >> b >> c;
+                cout << "Введите строку для создания треугольника (например, 3,4,5): " << endl;
+                cin.ignore();
+                getline(cin, str);
                 try {
                     delete t;
-                    t = new Triangle(a, b, c);
-                    cout << "Треугольник создан: " << t->toString() << endl;
+                    t = new Triangle(str);
+                    cout << "Треугольник создан из строки: " << (string)(*t) << endl;
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
                     t = nullptr;
                 }
                 break;
             case 2:
-                cout << "Введите строку для создания треугольника (например, Triangle(3,4,5)): ";
-                getline(cin, str);
-                try {
-                    delete t;
-                    t = new Triangle(str);
-                    cout << "Треугольник создан из строки: " << t->toString() << endl;
-                } catch (const exception& e) {
-                    cerr << e.what() << endl;
-                    t = nullptr;
+                if (t) {
+                    cout << "Информация о треугольнике: " << (string)*t << endl;
+                } else {
+                    cerr << "Треугольник не создан\n";
                 }
                 break;
             case 3:
                 if (t) {
-                    cout << "Информация о треугольнике: " << t->toString() << endl;
+                    cout << "Площадь треугольника: " << (double)*t << endl;
                 } else {
                     cerr << "Треугольник не создан\n";
                 }
                 break;
-            case 4:
-                if (t) {
-                    cout << "Площадь треугольника: " << t->area() << endl;
-                } else {
-                    cerr << "Треугольник не создан\n";
-                }
-                break;
-            case 5:
+            case 0:
                 delete t;
                 return 0;
             default:
