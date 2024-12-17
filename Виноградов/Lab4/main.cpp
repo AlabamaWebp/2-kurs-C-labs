@@ -1,153 +1,494 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <sstream>
-#include "vector.h"
+#include <string>
 
-void setupText(sf::Text& text, const sf::Font& font, const std::string& str, unsigned int size, float x, float y, sf::Color color = sf::Color::White) {
-    text.setFont(font);
-    text.setString(str);
-    text.setCharacterSize(size);
-    text.setPosition(x, y);
-    text.setFillColor(color);
+using namespace std;
+
+class MathObject
+{
+public:
+    virtual MathObject *add(MathObject &) = 0;
+    virtual MathObject *subtract(MathObject &) = 0;
+    virtual MathObject *multiply(MathObject &) = 0;
+    virtual MathObject *multiply(double) = 0;
+    virtual string toString() = 0;
+    virtual ~MathObject() = default;
+};
+int get_rand()
+{
+    return rand() % 51;
 }
 
-void handleInput(const sf::Event& event, sf::Text& inputField, bool vectorSelected, Vector*& vector) {
-    if (event.type == sf::Event::TextEntered && vectorSelected) {
-        if (event.text.unicode == '\b' && inputField.getString().getSize() > 0) {
-            std::string str = inputField.getString();
-            str.pop_back();
-            inputField.setString(str);
-        } else if (event.text.unicode < 128 && event.text.unicode != '\b') {
-            inputField.setString(inputField.getString() + static_cast<char>(event.text.unicode));
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TODO Matrix
+class Matrix : public MathObject
+{
+private:
+    int rows;
+    int cols;
+    double **data;
+
+public:
+    Matrix(int rows, int cols) : rows(rows), cols(cols)
+    {
+        data = new double *[rows];
+        for (int i = 0; i < rows; ++i)
+        {
+            data[i] = new double[cols];
+            for (int j = 0; j < cols; ++j)
+            {
+                data[i][j] = get_rand();
+            }
         }
     }
-}
-
-Vector* createVectorFromInput(const sf::Text& inputField) {
-    std::istringstream iss(inputField.getString().toAnsiString());
-    std::vector<double> elements;
-    double value;
-    while (iss >> value) {
-        elements.push_back(value);
-    }
-    Vector* vector = new Vector(elements.size());
-    for (size_t i = 0; i < elements.size(); ++i) {
-        (*vector)[i] = elements[i];
-    }
-    return vector;
-}
-
-void displayVector(sf::RenderWindow& window, Vector* vector, const sf::Text& vectorOutput) {
-    // Отрисовка вектора
-    sf::VertexArray lines(sf::LinesStrip, vector->size);
-    float centerX = window.getSize().x / 2;
-    float centerY = window.getSize().y / 2;
-    for (int i = 0; i < vector->size; ++i) {
-        lines[i].position = sf::Vector2f(centerX + (*vector)[i], centerY - (*vector)[i]);
-        lines[i].color = sf::Color::Red;
-    }
-    window.draw(lines);
-    window.draw(vectorOutput);
-}
-
-void setupExitButton(sf::Text& exitButton, const sf::Font& font) {
-    setupText(exitButton, font, "Exit to Menu", 20, 350, 500, sf::Color::Blue);
-}
-
-int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Math Objects Interface");
-
-    sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) {
-        std::cerr << "Error loading font\n";
-        return 1;
+    ~Matrix()
+    {
+        for (int i = 0; i < rows; ++i)
+        {
+            delete[] data[i];
+        }
+        delete[] data;
     }
 
-    sf::Text title;
-    setupText(title, font, "Select Math Object", 30, 300, 50);
+    MathObject *add(MathObject &obj) override
+    {
+        Matrix &other = dynamic_cast<Matrix &>(obj);
+        if (rows != other.rows || cols != other.cols)
+        {
+            cerr << "Ошибка" << endl;
+        }
+        Matrix *result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                result->data[i][j] = data[i][j] + other.data[i][j];
+            }
+        }
+        return result;
+    }
 
-    sf::RectangleShape vectorButton(sf::Vector2f(200, 50));
-    vectorButton.setPosition(300, 200);
-    vectorButton.setFillColor(sf::Color::Green);
+    MathObject *subtract(MathObject &obj) override
+    {
+        Matrix &other = dynamic_cast<Matrix &>(obj);
+        if (rows != other.rows || cols != other.cols)
+        {
+            cerr << "Ошибка" << endl;
+        }
+        Matrix *result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                result->data[i][j] = data[i][j] - other.data[i][j];
+            }
+        }
+        return result;
+    }
 
-    sf::Text vectorButtonText;
-    setupText(vectorButtonText, font, "Vector", 20, 370, 215);
-
-    sf::Text inputPrompt;
-    setupText(inputPrompt, font, "Enter vector elements separated by space:", 20, 50, 300, sf::Color::Transparent);
-
-    sf::Text inputField;
-    setupText(inputField, font, "", 20, 50, 350, sf::Color::Transparent);
-
-    sf::RectangleShape displayButton(sf::Vector2f(200, 50));
-    displayButton.setPosition(300, 400);
-    displayButton.setFillColor(sf::Color::Transparent);
-
-    sf::Text displayButtonText;
-    setupText(displayButtonText, font, "Display", 20, 370, 415, sf::Color::Transparent);
-
-    sf::Text vectorOutput;
-    setupText(vectorOutput, font, "", 20, 600, 50, sf::Color::White);
-
-    sf::Text exitButton;
-    setupExitButton(exitButton, font);
-
-    bool vectorSelected = false;
-    bool vectorDisplayed = false;
-    Vector* vector = nullptr;
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (vectorButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    vectorSelected = true;
-                    inputPrompt.setFillColor(sf::Color::White);
-                    inputField.setFillColor(sf::Color::White);
-                    displayButton.setFillColor(sf::Color::Blue);
-                    displayButtonText.setFillColor(sf::Color::White);
-                } else if (displayButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    if (vector) {
-                        delete vector;
-                    }
-                    vector = createVectorFromInput(inputField);
-                    vectorOutput.setString("Vector: " + vector->toString());
-                    vectorDisplayed = true;
-                } else if (exitButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    vectorSelected = false;
-                    vectorDisplayed = false;
-                    inputPrompt.setFillColor(sf::Color::Transparent);
-                    inputField.setFillColor(sf::Color::Transparent);
-                    displayButton.setFillColor(sf::Color::Transparent);
-                    displayButtonText.setFillColor(sf::Color::Transparent);
-                    vectorOutput.setString("");
-                    delete vector;
-                    vector = nullptr;
+    MathObject *multiply(MathObject &obj) override
+    {
+        Matrix &other = dynamic_cast<Matrix &>(obj);
+        if (cols != other.rows)
+        {
+            cerr << "Ошибка" << endl;
+        }
+        Matrix *result = new Matrix(rows, other.cols);
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < other.cols; ++j)
+            {
+                result->data[i][j] = 0;
+                for (int k = 0; k < cols; ++k)
+                {
+                    result->data[i][j] += data[i][k] * other.data[k][j];
                 }
             }
-            handleInput(event, inputField, vectorSelected, vector);
         }
-
-        window.clear();
-        if (!vectorSelected) {
-            window.draw(title);
-            window.draw(vectorButton);
-            window.draw(vectorButtonText);
-        } else {
-            window.draw(inputPrompt);
-            window.draw(inputField);
-            window.draw(displayButton);
-            window.draw(displayButtonText);
-            window.draw(exitButton);
-            if (vectorDisplayed && vector) {
-                displayVector(window, vector, vectorOutput);
-            }
-        }
-        window.display();
+        return result;
     }
 
-    delete vector;
+    MathObject *multiply(double scalar) override
+    {
+        Matrix *result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                result->data[i][j] = data[i][j] * scalar;
+            }
+        }
+        return result;
+    }
+
+    string toString() override
+    {
+        string result;
+        for (int i = 0; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                result += to_string(data[i][j]) + " ";
+            }
+            result += "\n";
+        }
+        return result;
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TODO Polynomial
+class Polynomial : public MathObject
+{
+private:
+    int degree;
+    double *coefficients;
+
+public:
+    Polynomial(int degree) : degree(degree)
+    {
+        coefficients = new double[degree + 1];
+        for (int i = 0; i <= degree; ++i)
+            coefficients[i] = get_rand();
+    }
+    ~Polynomial()
+    {
+        delete[] coefficients;
+    }
+
+    MathObject *add(MathObject &obj) override
+    {
+        Polynomial &other = dynamic_cast<Polynomial &>(obj);
+        int maxDegree = max(degree, other.degree);
+        Polynomial *result = new Polynomial(maxDegree);
+        for (int i = 0; i <= maxDegree; ++i)
+        {
+            result->coefficients[i] = (i <= degree ? coefficients[i] : 0) + (i <= other.degree ? other.coefficients[i] : 0);
+        }
+        return result;
+    }
+
+    MathObject *subtract(MathObject &obj) override
+    {
+        Polynomial &other = dynamic_cast<Polynomial &>(obj);
+        int maxDegree = max(degree, other.degree);
+        Polynomial *result = new Polynomial(maxDegree);
+        for (int i = 0; i <= maxDegree; ++i)
+        {
+            result->coefficients[i] = (i <= degree ? coefficients[i] : 0) - (i <= other.degree ? other.coefficients[i] : 0);
+        }
+        return result;
+    }
+
+    MathObject *multiply(MathObject &obj) override
+    {
+        Polynomial &other = dynamic_cast<Polynomial &>(obj);
+        int newDegree = degree + other.degree;
+        Polynomial *result = new Polynomial(newDegree);
+        for (int i = 0; i <= newDegree; ++i)
+        {
+            result->coefficients[i] = 0;
+        }
+        for (int i = 0; i <= degree; ++i)
+        {
+            for (int j = 0; j <= other.degree; ++j)
+            {
+                result->coefficients[i + j] += coefficients[i] * other.coefficients[j];
+            }
+        }
+        return result;
+    }
+
+    MathObject *multiply(double scalar) override
+    {
+        Polynomial *result = new Polynomial(degree);
+        for (int i = 0; i <= degree; ++i)
+        {
+            result->coefficients[i] = coefficients[i] * scalar;
+        }
+        return result;
+    }
+
+    string toString() override
+    {
+        string result;
+        for (int i = degree; i >= 0; --i)
+        {
+            result += to_string(coefficients[i]) + "x^" + to_string(i) + (i > 0 ? " + " : "");
+        }
+        return result;
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  TODO Vector
+class Vector : public MathObject
+{
+private:
+    int size;
+    double *data;
+
+public:
+    Vector(int size) : size(size)
+    {
+        data = new double[size];
+        for (int i = 0; i < size; ++i)
+        {
+            data[i] = get_rand();
+        }
+    }
+    ~Vector()
+    {
+        delete[] data;
+    }
+
+    MathObject *add(MathObject &obj) override
+    {
+        Vector &other = dynamic_cast<Vector &>(obj);
+        if (size != other.size)
+        {
+            cerr << "Ошибка: Размеры векторов должны совпадать для сложения" << endl;
+            return nullptr;
+        }
+        Vector *result = new Vector(size);
+        for (int i = 0; i < size; ++i)
+        {
+            result->data[i] = data[i] + other.data[i];
+        }
+        return result;
+    }
+
+    MathObject *subtract(MathObject &obj) override
+    {
+        Vector &other = dynamic_cast<Vector &>(obj);
+        if (size != other.size)
+        {
+            cerr << "Ошибка: Размеры векторов должны совпадать для вычитания" << endl;
+            return nullptr;
+        }
+        Vector *result = new Vector(size);
+        for (int i = 0; i < size; ++i)
+        {
+            result->data[i] = data[i] - other.data[i];
+        }
+        return result;
+    }
+
+    MathObject *multiply(MathObject &obj) override
+    {
+        cerr << "Ошибка: Операция умножения векторов не определена" << endl;
+        return nullptr;
+    }
+
+    MathObject *multiply(double scalar) override
+    {
+        Vector *result = new Vector(size);
+        for (int i = 0; i < size; ++i)
+        {
+            result->data[i] = data[i] * scalar;
+        }
+        return result;
+    }
+
+    string toString() override
+    {
+        string result;
+        for (int i = 0; i < size; ++i)
+        {
+            result += to_string(data[i]) + " ";
+        }
+        return result;
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  TODO Fraction
+class Fraction : public MathObject
+{
+private:
+    int numerator;
+    int denominator;
+
+    // int gcd(int a, int b)
+    // {
+    //     return b == 0 ? a : gcd(b, a % b);
+    // }
+
+    // void reduce()
+    // {
+    //     int divisor = gcd(numerator, denominator);
+    //     numerator /= divisor;
+    //     denominator /= divisor;
+    // }
+
+public:
+    Fraction(int numerator, int denominator) : numerator(numerator), denominator(denominator)
+    {
+        if (denominator == 0)
+            cerr << "Ошибка: знаменатель не может быть равен нулю" << endl;
+        // reduce();
+    }
+
+    MathObject *add(MathObject &obj) override
+    {
+        Fraction &other = dynamic_cast<Fraction &>(obj);
+        int commonDenominator = denominator * other.denominator;
+        int newNumerator = numerator * other.denominator + other.numerator * denominator;
+        return new Fraction(newNumerator, commonDenominator);
+    }
+
+    MathObject *subtract(MathObject &obj) override
+    {
+        Fraction &other = dynamic_cast<Fraction &>(obj);
+        int commonDenominator = denominator * other.denominator;
+        int newNumerator = numerator * other.denominator - other.numerator * denominator;
+        return new Fraction(newNumerator, commonDenominator);
+    }
+
+    MathObject *multiply(MathObject &obj) override
+    {
+        Fraction &other = dynamic_cast<Fraction &>(obj);
+        int newNumerator = numerator * other.numerator;
+        int newDenominator = denominator * other.denominator;
+        return new Fraction(newNumerator, newDenominator);
+    }
+
+    MathObject *multiply(double scalar) override
+    {
+        int newNumerator = numerator * scalar;
+        return new Fraction(newNumerator, denominator);
+    }
+
+    string toString() override
+    {
+        return to_string(numerator) + "/" + to_string(denominator);
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  TODO Complex
+class Complex : public MathObject
+{
+private:
+    double real;
+    double imag;
+
+public:
+    Complex(double real1, double imag1)
+    {
+        real = real1;
+        imag = imag1;
+    }
+
+    MathObject *add(MathObject &obj) override
+    {
+        Complex &other = dynamic_cast<Complex &>(obj);
+        return new Complex(real + other.real, imag + other.imag);
+    }
+
+    MathObject *subtract(MathObject &obj) override
+    {
+        Complex &other = dynamic_cast<Complex &>(obj);
+        return new Complex(real - other.real, imag - other.imag);
+    }
+
+    MathObject *multiply(MathObject &obj) override
+    {
+        Complex &other = dynamic_cast<Complex &>(obj);
+        return new Complex(real * other.real - imag * other.imag, real * other.imag + imag * other.real);
+    }
+
+    MathObject *multiply(double scalar) override
+    {
+        return new Complex(real * scalar, imag * scalar);
+    }
+
+    string toString() override
+    {
+        return to_string(real) + " + " + to_string(imag) + "i";
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void showMathObjectMenu() {
+    int choice;
+    while (true) {
+        cout << "Выберите математический объект:\n";
+        cout << "1. Матрица\n";
+        cout << "2. Полином\n";
+        cout << "3. Вектор\n";
+        cout << "4. Дробь\n";
+        cout << "5. Комплексное число\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+
+        if (choice >= 1 && choice <= 5) {
+            showObjectMenu(choice);
+        } else if (choice == 6) {
+            return;
+        } else {
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+
+void showObjectMenu(int choice) {
+    while (true) {
+        cout << "Выберите операцию:\n";
+        cout << "1. Сложение\n";
+        cout << "2. Вычитание\n";
+        cout << "3. Умножение на объект\n";
+        cout << "4. Умножение на число\n";
+        cout << "5. Показать объект\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        int operationChoice;
+        cin >> operationChoice;
+
+        switch (operationChoice) {
+        case 1:
+            // Логика сложения
+            cout << "Выполняется сложение...\n";
+            break;
+        case 2:
+            // Логика вычитания
+            cout << "Выполняется вычитание...\n";
+            break;
+        case 3:
+            // Логика умножения на объект
+            cout << "Выполняется умножение на объект...\n";
+            break;
+        case 4:
+            // Логика умножения на число
+            cout << "Выполняется умножение на число...\n";
+            break;
+        case 5:
+            // Логика отображения объекта
+            cout << "Отображение объекта...\n";
+            break;
+        case 6:
+            return;
+        default:
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+void menu() {
+    int choice;
+    while (true) {
+        cout << "Выберите действие:\n";
+        cout << "1. Математические объекты\n";
+        cout << "2. Выход\n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            showMathObjectMenu();
+        } else if (choice == 2) {
+            cout << "Выход...\n";
+            return;
+        } else {
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+int main() {
+    menu();
     return 0;
 }
