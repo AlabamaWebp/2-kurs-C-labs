@@ -44,9 +44,9 @@ public:
 void printMenu() {
     cout << "Выберите действие:\n";
     cout << "1. Создать треугольник\n";
-    cout << "2. Показать информацию о треугольнике\n";
-    cout << "3. Вычислить площадь треугольника\n";
-    cout << "4. Создать треугольник из строки\n";
+    cout << "2. Создать треугольник из строки\n";
+    cout << "3. Показать информацию о треугольнике\n";
+    cout << "4. Вычислить площадь треугольника\n";
     cout << "5. Выйти\n";
 }
 
@@ -62,7 +62,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                cout << "Введите стороны треугольника (a, b, c): ";
+                cout << "Введите стороны треугольника (a,b,c): ";
                 cin >> a >> b >> c;
                 try {
                     delete t;
@@ -74,22 +74,7 @@ int main() {
                 }
                 break;
             case 2:
-                if (t) {
-                    cout << "Информация о треугольнике: " << t->toString() << endl;
-                } else {
-                    cerr << "Треугольник не создан\n";
-                }
-                break;
-            case 3:
-                if (t) {
-                    cout << "Площадь треугольника: " << t->area() << endl;
-                } else {
-                    cerr << "Треугольник не создан\n";
-                }
-                break;
-            case 4:
-                cout << "Введите строку для создания треугольника (например, Triangle(3, 4, 5)): ";
-                cin.ignore();
+                cout << "Введите строку для создания треугольника (например, Triangle(3,4,5)): ";
                 getline(cin, str);
                 try {
                     delete t;
@@ -98,6 +83,20 @@ int main() {
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
                     t = nullptr;
+                }
+                break;
+            case 3:
+                if (t) {
+                    cout << "Информация о треугольнике: " << t->toString() << endl;
+                } else {
+                    cerr << "Треугольник не создан\n";
+                }
+                break;
+            case 4:
+                if (t) {
+                    cout << "Площадь треугольника: " << t->area() << endl;
+                } else {
+                    cerr << "Треугольник не создан\n";
                 }
                 break;
             case 5:

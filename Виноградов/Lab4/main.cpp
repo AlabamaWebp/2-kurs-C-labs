@@ -139,14 +139,14 @@ public:
 class Polynomial : public MathObject
 {
 private:
-    int degree;
+    int stepen;
     double *coefficients;
 
 public:
-    Polynomial(int degree) : degree(degree)
+    Polynomial(int stepen) : stepen(stepen)
     {
-        coefficients = new double[degree + 1];
-        for (int i = 0; i <= degree; ++i)
+        coefficients = new double[stepen + 1];
+        for (int i = 0; i <= stepen; ++i)
             coefficients[i] = get_rand();
     }
     ~Polynomial()
@@ -157,11 +157,11 @@ public:
     MathObject *add(MathObject &obj) override
     {
         Polynomial &other = dynamic_cast<Polynomial &>(obj);
-        int maxDegree = max(degree, other.degree);
-        Polynomial *result = new Polynomial(maxDegree);
-        for (int i = 0; i <= maxDegree; ++i)
+        int maxStepen = max(stepen, other.stepen);
+        Polynomial *result = new Polynomial(maxStepen);
+        for (int i = 0; i <= maxStepen; ++i)
         {
-            result->coefficients[i] = (i <= degree ? coefficients[i] : 0) + (i <= other.degree ? other.coefficients[i] : 0);
+            result->coefficients[i] = (i <= stepen ? coefficients[i] : 0) + (i <= other.stepen ? other.coefficients[i] : 0);
         }
         return result;
     }
@@ -169,11 +169,11 @@ public:
     MathObject *subtract(MathObject &obj) override
     {
         Polynomial &other = dynamic_cast<Polynomial &>(obj);
-        int maxDegree = max(degree, other.degree);
-        Polynomial *result = new Polynomial(maxDegree);
-        for (int i = 0; i <= maxDegree; ++i)
+        int maxStepen = max(stepen, other.stepen);
+        Polynomial *result = new Polynomial(maxStepen);
+        for (int i = 0; i <= maxStepen; ++i)
         {
-            result->coefficients[i] = (i <= degree ? coefficients[i] : 0) - (i <= other.degree ? other.coefficients[i] : 0);
+            result->coefficients[i] = (i <= stepen ? coefficients[i] : 0) - (i <= other.stepen ? other.coefficients[i] : 0);
         }
         return result;
     }
@@ -181,15 +181,15 @@ public:
     MathObject *multiply(MathObject &obj) override
     {
         Polynomial &other = dynamic_cast<Polynomial &>(obj);
-        int newDegree = degree + other.degree;
-        Polynomial *result = new Polynomial(newDegree);
-        for (int i = 0; i <= newDegree; ++i)
+        int newStepen = stepen + other.stepen;
+        Polynomial *result = new Polynomial(newStepen);
+        for (int i = 0; i <= newStepen; ++i)
         {
             result->coefficients[i] = 0;
         }
-        for (int i = 0; i <= degree; ++i)
+        for (int i = 0; i <= stepen; ++i)
         {
-            for (int j = 0; j <= other.degree; ++j)
+            for (int j = 0; j <= other.stepen; ++j)
             {
                 result->coefficients[i + j] += coefficients[i] * other.coefficients[j];
             }
@@ -199,8 +199,8 @@ public:
 
     MathObject *multiply(double scalar) override
     {
-        Polynomial *result = new Polynomial(degree);
-        for (int i = 0; i <= degree; ++i)
+        Polynomial *result = new Polynomial(stepen);
+        for (int i = 0; i <= stepen; ++i)
         {
             result->coefficients[i] = coefficients[i] * scalar;
         }
@@ -210,7 +210,7 @@ public:
     string toString() override
     {
         string result;
-        for (int i = degree; i >= 0; --i)
+        for (int i = stepen; i >= 0; --i)
         {
             result += to_string(coefficients[i]) + "x^" + to_string(i) + (i > 0 ? " + " : "");
         }
@@ -273,8 +273,19 @@ public:
 
     MathObject *multiply(MathObject &obj) override
     {
-        cerr << "Ошибка: Операция умножения векторов не определена" << endl;
-        return nullptr;
+
+        Vector &other = dynamic_cast<Vector &>(obj);
+        if (size != other.size)
+        {
+            cerr << "Ошибка: Размеры векторов должны совпадать для умножения" << endl;
+            return nullptr;
+        }
+        Vector *result = new Vector(size);
+        for (int i = 0; i < size; i++)
+        {
+            result->data[i] = data[i] * other.data[i];
+        }
+        return result;
     }
 
     MathObject *multiply(double scalar) override
@@ -357,47 +368,43 @@ public:
 class Complex : public MathObject
 {
 private:
-    double real;
-    double imag;
+    double a;
+    double b;
 
 public:
-    Complex(double real1, double imag1)
-    {
-        real = real1;
-        imag = imag1;
-    }
+    Complex(double a1, double b1) : a(a1), b(b1) {}
     Complex()
     {
-        real = get_rand();
-        imag = get_rand();
+        a = get_rand();
+        b = get_rand();
     }
 
     MathObject *add(MathObject &obj) override
     {
         Complex &other = dynamic_cast<Complex &>(obj);
-        return new Complex(real + other.real, imag + other.imag);
+        return new Complex(a + other.a, b + other.b);
     }
 
     MathObject *subtract(MathObject &obj) override
     {
         Complex &other = dynamic_cast<Complex &>(obj);
-        return new Complex(real - other.real, imag - other.imag);
+        return new Complex(a - other.a, b - other.b);
     }
 
     MathObject *multiply(MathObject &obj) override
     {
         Complex &other = dynamic_cast<Complex &>(obj);
-        return new Complex(real * other.real - imag * other.imag, real * other.imag + imag * other.real);
+        return new Complex(a * other.a - b * other.b, a * other.b + b * other.a);
     }
 
     MathObject *multiply(double scalar) override
     {
-        return new Complex(real * scalar, imag * scalar);
+        return new Complex(a * scalar, b * scalar);
     }
 
     string toString() override
     {
-        return to_string(real) + " + " + to_string(imag) + "i";
+        return to_string(a) + " + " + to_string(b) + "i";
     }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -812,7 +819,6 @@ void menu()
         cout << "3. Выход\n";
         cout << "Ваш выбор: ";
         cin >> choice;
-
         if (choice == 1)
             showMathObjectMenu();
         else if (choice == 2)
