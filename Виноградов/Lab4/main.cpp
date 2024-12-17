@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -311,7 +312,8 @@ public:
         if (denominator == 0)
             cerr << "Ошибка: знаменатель не может быть равен нулю" << endl;
     }
-    Fraction() {
+    Fraction()
+    {
         numerator = get_rand();
         denominator = get_rand();
     }
@@ -365,7 +367,8 @@ public:
         real = real1;
         imag = imag1;
     }
-    Complex() {
+    Complex()
+    {
         real = get_rand();
         imag = get_rand();
     }
@@ -399,49 +402,266 @@ public:
     }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void showObjectMenu(int choice) {
+class Shape
+{
+public:
+    virtual void move(double dx, double dy) = 0;
+    virtual void rotate(double angle) = 0;
+    virtual double area() = 0;
+    virtual double perimeter() = 0;
+    virtual void display() = 0;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Triangle : public Shape
+{
+    double base, height;
+    double x, y;
+    double rotation;
+
+public:
+    Triangle() : base(get_rand()), height(get_rand()), x(0), y(0), rotation(0) {}
+
+    void move(double dx, double dy) override
+    {
+        x += dx;
+        y += dy;
+    }
+
+    void rotate(double angle) override
+    {
+        rotation += angle;
+    }
+
+    double area() override
+    {
+        return (base * height) / 2;
+    }
+
+    double perimeter() override
+    {
+        double side = sqrt((base / 2) * (base / 2) + height * height);
+        return base + 2 * side;
+    }
+
+    void display() override
+    {
+        cout << "Треугольник: База = " << base << ", Высота = " << height
+             << ", x = " << x << ", y = " << y
+             << ", угол = " << rotation << " градусов\n";
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Rectangle : public Shape
+{
+    double width, height;
+    double x, y;
+    double rotation;
+
+public:
+    Rectangle() : width(get_rand()), height(get_rand()), x(0), y(0), rotation(0) {}
+
+    void move(double dx, double dy) override
+    {
+        x += dx;
+        y += dy;
+    }
+
+    void rotate(double angle) override
+    {
+        rotation += angle;
+    }
+
+    double area() override
+    {
+        return width * height;
+    }
+
+    double perimeter() override
+    {
+        return 2 * (width + height);
+    }
+
+    void display() override
+    {
+        cout << "Прямоугольник: Ширина = " << width << ", Высота = " << height
+             << ", x = " << x << ", y = " << y
+             << ", угол = " << rotation << " градусов\n";
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Rhombus : public Shape
+{
+    double diagonal1, diagonal2;
+    double x, y;
+    double rotation;
+
+public:
+    Rhombus() : diagonal1(get_rand()), diagonal2(get_rand()), x(0), y(0), rotation(0) {}
+
+    void move(double dx, double dy) override
+    {
+        x += dx;
+        y += dy;
+    }
+
+    void rotate(double angle) override
+    {
+        rotation += angle;
+    }
+
+    double area() override
+    {
+        return (diagonal1 * diagonal2) / 2;
+    }
+
+    double perimeter() override
+    {
+        double side = sqrt((diagonal1 / 2) * (diagonal1 / 2) + (diagonal2 / 2) * (diagonal2 / 2));
+        return 4 * side;
+    }
+
+    void display() override
+    {
+        cout << "Ромб: 1 диагональ = " << diagonal1 << ", 2 диагональ = " << diagonal2
+             << ", x = " << x << ", y = " << y
+             << ", угол = " << rotation << " градусов\n";
+    }
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Ellipse : public Shape
+{
+public:
+    Ellipse() : majorAxis(get_rand()), minorAxis(get_rand()), x(0), y(0), rotation(0) {}
+
+    void move(double dx, double dy) override
+    {
+        x += dx;
+        y += dy;
+    }
+
+    void rotate(double angle) override
+    {
+        rotation += angle;
+    }
+
+    double area() override
+    {
+        return M_PI * majorAxis * minorAxis;
+    }
+
+    double perimeter() override
+    {
+        return M_PI * (3 * (majorAxis + minorAxis) - sqrt((3 * majorAxis + minorAxis) * (majorAxis + 3 * minorAxis)));
+    }
+
+    void display() override
+    {
+        cout << "Эллипс: главная ось = " << majorAxis << ", вторая ось = " << minorAxis
+             << ", x = " << x << ", y = " << y
+             << ", угол = " << rotation << " градусов\n";
+    }
+
+private:
+    double majorAxis, minorAxis;
+    double x, y;
+    double rotation;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Trapezoid : public Shape
+{
+public:
+    Trapezoid() : base1(get_rand()), base2(get_rand()), height(get_rand()), side1(get_rand()), side2(get_rand()), x(0), y(0), rotation(0) {}
+
+    void move(double dx, double dy) override
+    {
+        x += dx;
+        y += dy;
+    }
+
+    void rotate(double angle) override
+    {
+        rotation += angle;
+    }
+
+    double area() override
+    {
+        return (base1 + base2) * height / 2;
+    }
+
+    double perimeter() override
+    {
+        return base1 + base2 + side1 + side2;
+    }
+
+    void display() override
+    {
+        cout << "Трапеция: верхняя основа = " << base1 << ", нижняя основа = " << base2
+             << ", Высота = " << height << ", левая сторона = " << side1 << ", правая сторона = " << side2
+             << ", x = " << x << ", y = " << y
+             << ", угол = " << rotation << " градусов\n";
+    }
+
+private:
+    double base1, base2, height, side1, side2;
+    double x, y;
+    double rotation;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void showObjectMenu(int choice)
+{
     MathObject *one;
     MathObject *two;
     MathObject *tmp;
     int choice55;
-    switch (choice) {
-        case 1:
-            one = new Matrix(3,3);
-            two = new Matrix(3,3);
-            break;
-        case 2:
-            one = new Polynomial(3);
-            two = new Polynomial(3);
-            break;
-        case 3:
-            one = new Vector(3);
-            two = new Vector(3);
-            break;
-        case 4:
-            one = new Fraction();
-            two = new Fraction();
-            break;
-        case 5:
-            one = new Complex();
-            two = new Complex();
-            break;
-        default:
-            break;
+    switch (choice)
+    {
+    case 1:
+        one = new Matrix(3, 3);
+        two = new Matrix(3, 3);
+        break;
+    case 2:
+        one = new Polynomial(3);
+        two = new Polynomial(3);
+        break;
+    case 3:
+        one = new Vector(3);
+        two = new Vector(3);
+        break;
+    case 4:
+        one = new Fraction();
+        two = new Fraction();
+        break;
+    case 5:
+        one = new Complex();
+        two = new Complex();
+        break;
+    default:
+        break;
     }
-    cout << "Объект 1. " << endl << one->toString() << endl << "Объект 2. " << endl << two->toString() << endl;
-    while (true) {
+    cout << "Объект 1. " << endl
+         << one->toString() << endl
+         << "Объект 2. " << endl
+         << two->toString() << endl;
+    while (true)
+    {
         cout << "Выберите операцию:\n";
         cout << "1. Сложение\n";
         cout << "2. Вычитание\n";
         cout << "3. Умножение на объект\n";
         cout << "4. Умножение на число\n";
-        cout << "6. Выход\n";
+        cout << "5. Выход\n";
         cout << "Ваш выбор: ";
         int operationChoice;
         cin >> operationChoice;
         tmp = nullptr;
-        switch (operationChoice) {
+        switch (operationChoice)
+        {
         case 1:
             tmp = one->add(*two);
             break;
@@ -456,19 +676,22 @@ void showObjectMenu(int choice) {
             cin >> choice55;
             tmp = one->multiply(choice55);
             break;
-        case 6:
+        case 5:
             return;
         default:
             cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
         }
-        if (tmp != nullptr) {
+        if (tmp != nullptr)
+        {
             cout << tmp->toString() << endl;
         }
     }
 }
-void showMathObjectMenu() {
+void showMathObjectMenu()
+{
     int choice;
-    while (true) {
+    while (true)
+    {
         cout << "Выберите математический объект:\n";
         cout << "1. Матрица\n";
         cout << "2. Полином\n";
@@ -479,35 +702,131 @@ void showMathObjectMenu() {
         cout << "Ваш выбор: ";
         cin >> choice;
 
-        if (choice >= 1 && choice <= 5) {
+        if (choice >= 1 && choice <= 5)
+        {
             showObjectMenu(choice);
-        } else if (choice == 6) {
+        }
+        else if (choice == 6)
+        {
             return;
-        } else {
+        }
+        else
+        {
             cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
         }
     }
 }
-void menu() {
+void showFigureMenu(int choice)
+{
+    Shape *one;
+    // int choice55;
+    switch (choice)
+    {
+    case 1:
+        one = new Triangle();
+        break;
+    case 2:
+        one = new Rectangle();
+        break;
+    case 3:
+        one = new Rhombus();
+        break;
+    case 4:
+        one = new Ellipse();
+        break;
+    case 5:
+        one = new Trapezoid();
+        break;
+    default:
+        break;
+    }
+    one->display();
+    while (true)
+    {
+        cout << "Выберите операцию:\n";
+        cout << "1. Случайное перемещение\n";
+        cout << "2. Случайный поворот\n";
+        cout << "3. Нахождение площади\n";
+        cout << "4. Нахождение периметра\n";
+        cout << "5. Выход\n";
+        cout << "Ваш выбор: ";
+        int operationChoice;
+        cin >> operationChoice;
+        switch (operationChoice)
+        {
+        case 1:
+
+            one->move(get_rand(), get_rand());
+            one->display();
+            break;
+        case 2:
+            one->rotate(get_rand());
+            one->display();
+            break;
+        case 3:
+            cout << "периметр = " << one->perimeter() << endl;
+            break;
+        case 4:
+            cout << "площадь = " << one->area() << endl;
+            break;
+        case 5:
+            return;
+        default:
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+        }
+    }
+}
+void showFigures()
+{
     int choice;
-    while (true) {
+    while (true)
+    {
+        cout << "Выберите фигуру:\n";
+        cout << "1. Треугольник\n";
+        cout << "2. Прямоугольник\n";
+        cout << "3. Ромб\n";
+        cout << "4. Эллипс\n";
+        cout << "5. Трапеция\n";
+        cout << "6. Выход\n";
+        cout << "Ваш выбор: ";
+        cin >> choice;
+        if (choice >= 1 && choice <= 5)
+            showFigureMenu(choice);
+        else if (choice == 6)
+            return;
+        else
+            cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
+    }
+}
+void menu()
+{
+    int choice;
+    while (true)
+    {
         cout << "Выберите действие:\n";
         cout << "1. Математические объекты\n";
-        cout << "2. Выход\n";
+        cout << "2. Геометрические фигуры\n";
+        cout << "3. Выход\n";
         cout << "Ваш выбор: ";
         cin >> choice;
 
-        if (choice == 1) {
+        if (choice == 1)
             showMathObjectMenu();
-        } else if (choice == 2) {
+        else if (choice == 2)
+            showFigures();
+        else if (choice == 3)
+        {
             cout << "Выход...\n";
             return;
-        } else {
+        }
+        else
+        {
             cout << "Неверный выбор. Пожалуйста, попробуйте снова.\n";
         }
     }
 }
-int main() {
+int main()
+{
     menu();
     return 0;
 }
