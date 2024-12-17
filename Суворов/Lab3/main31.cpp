@@ -25,8 +25,9 @@ void runTask(string filename1, string filename2)
         return;
     }
     string row;
-    getline(file1, row)
-        file1.close();
+    getline(file1, row);
+    transformate(row);
+    file1.close();
 
     ofstream file2(filename2, ios::trunc);
     file2.close();
