@@ -10,7 +10,7 @@ private:
     void checkIndex(int index) {
         if (index < 0 || index >= size) {
             // cerr << "Ошибка: индекс вне диапазона" << endl;
-            throw out_of_range("Индекс вне диапазона");
+            throw logic_error("Индекс вне диапазона");
         }
     }
 
@@ -18,7 +18,7 @@ public:
     Vector(int initialCapacity = 10) {
         if (initialCapacity > MAX_SIZE) {
             // cerr << "Ошибка: попытка создать вектор больше максимального размера" << endl;
-            throw length_error("Максимальный размер вектора превышен");
+            throw logic_error("Максимальный размер вектора превышен");
         }
         size = 0;
         capacity = initialCapacity;
@@ -42,7 +42,7 @@ public:
         if (size >= capacity) {
             if (capacity * 2 > MAX_SIZE) {
                 // cerr << "Ошибка: попытка добавить элемент в вектор больше максимального размера" << endl;
-                throw length_error("Максимальный размер вектора превышен");
+                throw logic_error("Максимальный размер вектора превышен");
             }
             int* newData = new int[capacity * 2];
             for (int i = 0; i < size; ++i) {
@@ -58,7 +58,7 @@ public:
     void removeFirst() {
         if (size == 0) {
             // cerr << "Ошибка: попытка удалить элемент из пустого вектора" << endl;
-            throw underflow_error("Вектор пуст");
+            throw logic_error("Вектор пуст");
         }
         for (int i = 1; i < size; ++i) {
             data[i - 1] = data[i];
@@ -69,7 +69,7 @@ public:
     void removeLast() {
         if (size == 0) {
             // cerr << "Ошибка: попытка удалить элемент из пустого вектора" << endl;
-            throw underflow_error("Вектор пуст");
+            throw logic_error("Вектор пуст");
         }
         --size;
     }
