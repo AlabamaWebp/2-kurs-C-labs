@@ -5,7 +5,6 @@ class Vector {
 private:
     int* data;
     int size;
-    int capacity;
 
     void checkIndex(int index) {
         if (index < 0 || index >= size) {
@@ -15,14 +14,9 @@ private:
     }
 
 public:
-    Vector(int initialCapacity = 10) {
-        if (initialCapacity > MAX_SIZE) {
-            // cerr << "Ошибка: попытка создать вектор больше максимального размера" << endl;
-            throw logic_error("Максимальный размер вектора превышен");
-        }
+    Vector() {
         size = 0;
-        capacity = initialCapacity;
-        data = new int[capacity];
+        data = new int();
     }
 
     ~Vector() {
@@ -39,18 +33,8 @@ public:
     }
 
     void add(int value) {
-        if (size >= capacity) {
-            if (capacity * 2 > MAX_SIZE) {
-                // cerr << "Ошибка: попытка добавить элемент в вектор больше максимального размера" << endl;
-                throw logic_error("Максимальный размер вектора превышен");
-            }
-            int* newData = new int[capacity * 2];
-            for (int i = 0; i < size; ++i) {
-                newData[i] = data[i];
-            }
-            delete[] data;
-            data = newData;
-            capacity *= 2;
+        if ((size + 1) >= MAX_SIZE) {
+            throw logic_error("Максимальный размер вектора превышен");
         }
         data[size++] = value;
     }

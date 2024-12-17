@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-int MAX_SIZE = 100;
+const int MAX_SIZE = 100;
 
 class Node
 {

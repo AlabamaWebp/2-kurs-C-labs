@@ -31,13 +31,13 @@ public:
         return "Triangle(" + to_string(a) + ", " + to_string(b) + ", " + to_string(c) + ")";
     }
 
-    Triangle fromString(const string& str) {
+    Triangle(string& str) {
         double sideA, sideB, sideC;
         if (sscanf(str.c_str(), "Triangle(%lf, %lf, %lf)", &sideA, &sideB, &sideC) != 3) {
             cerr << "Ошибка: неправильный формат строки" << endl;
             throw invalid_argument("Неправильный формат строки");
         }
-        return Triangle(sideA, sideB, sideC);
+        // return Triangle(sideA, sideB, sideC);
     }
 };
 
@@ -93,7 +93,7 @@ int main() {
                 getline(cin, str);
                 try {
                     delete t;
-                    t = Triangle::fromString(str);
+                    t = new Triangle(str);
                     cout << "Треугольник создан из строки: " << t->toString() << endl;
                 } catch (const exception& e) {
                     cerr << e.what() << endl;
