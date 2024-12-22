@@ -222,17 +222,24 @@ public:
 class Vector : public MathObject
 {
 private:
-    int size = 3;
+    const int size = 3;
     double *data;
 
 public:
-    Vector() // : size(size)
+    Vector()
     {
         data = new double[size];
         for (int i = 0; i < size; ++i)
         {
             data[i] = get_rand();
         }
+    }
+    Vector(double a, double b, double c)
+    {
+        data = new double[size];
+        data[0] = a;
+        data[1] = b;
+        data[2] = c;
     }
     ~Vector()
     {
@@ -242,12 +249,7 @@ public:
     MathObject *add(MathObject &obj) override
     {
         Vector &other = dynamic_cast<Vector &>(obj);
-        if (size != other.size)
-        {
-            cerr << "Ошибка: Размеры векторов должны совпадать для сложения" << endl;
-            return nullptr;
-        }
-        Vector *result = new Vector(size);
+        Vector *result = new Vector();
         for (int i = 0; i < size; ++i)
         {
             result->data[i] = data[i] + other.data[i];
@@ -258,40 +260,26 @@ public:
     MathObject *subtract(MathObject &obj) override
     {
         Vector &other = dynamic_cast<Vector &>(obj);
-        if (size != other.size)
-        {
-            cerr << "Ошибка: Размеры векторов должны совпадать для вычитания" << endl;
-            return nullptr;
-        }
-        Vector *result = new Vector(size);
+        Vector *result = new Vector();
         for (int i = 0; i < size; i++)
-        {
-            result->data[i]
-        }
-        // векторное произведение
-        result->data[0] = data[1] * other.data[2] - data[2] * other.data[1];
-        result->data[1] = data[2] * other.data[0] - data[0] * other.data[2];
-        result->data[2] = data[0] * other.data[1] - data[0] * other.data[1];
+            result->data[i] = data[i] - other.data[i];
         return result;
     }
 
     MathObject *multiply(MathObject &obj) override
     {
         Vector &other = dynamic_cast<Vector &>(obj);
-        if (size != other.size)
-        {
-            cerr << "Ошибка: Размеры векторов должны совпадать для умножения" << endl;
-            return nullptr;
-        }
-        Vector *result = new Vector(size);
-        for (int i = 0; i < size; i++)
-            result->data[i] = data[i] * other.data[i];
-        return result;
+        
+        return new Vector(
+            data[1] * other.data[2] - data[2] * other.data[1],
+            data[2] * other.data[0] - data[0] * other.data[2],
+            data[0] * other.data[1] - data[1] * other.data[0]
+        );
     }
 
     MathObject *multiply(double num) override
     {
-        Vector *result = new Vector(size);
+        Vector *result = new Vector();
         for (int i = 0; i < size; ++i)
         {
             result->data[i] = data[i] * num;
@@ -694,7 +682,12 @@ void showObjectMenu(int choice)
         }
         if (tmp != nullptr)
         {
-            cout << tmp->toString() << endl;
+            cout << "Объект 1. " << endl
+                << one->toString() << endl
+                << "Объект 2. " << endl
+                << two->toString() << endl
+                << "Результат " << endl
+                << tmp->toString() << endl;
         }
     }
 }

@@ -17,7 +17,6 @@ private:
     {
         if (index < 0 || index >= size)
         {
-            // cerr << "Ошибка: индекс вне диапазона" << endl;
             throw logic_error("Индекс вне диапазона");
         }
     }
