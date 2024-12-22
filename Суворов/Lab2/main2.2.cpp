@@ -133,7 +133,7 @@ void runTask(string filename1)
     file1.close();
     cout << "Min curiers: " << max_curiers << endl;
     ofstream file2("answer22", ios::trunc);
-    file2 << "Min curiers: " << max_curiers;
+    file2 << max_curiers;
     file2.close();
 }
 
