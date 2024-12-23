@@ -184,7 +184,7 @@ int main()
                 cerr << "Ошибка: неверный выбор\n";
                 break;
             }
-            catch (const exception &e)
+            catch (exception &e)
             {
                 cerr << e.what() << endl;
             }

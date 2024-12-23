@@ -129,7 +129,7 @@ int main()
                 break;
             }
         }
-        catch (const exception &e)
+        catch (exception &e)
         {
             cerr << e.what() << endl;
         }
