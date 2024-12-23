@@ -47,9 +47,7 @@ public:
     void add(int value)
     {
         if ((size + 1) >= MAX_SIZE)
-        {
             throw logic_error("Максимальный размер вектора превышен");
-        }
         data[size++] = value;
     }
 
@@ -93,7 +91,7 @@ void printMenu()
     cout << "4. Получить элемент по индексу\n";
     cout << "5. Вывести размер вектора\n";
     cout << "6. Вывести все элементы\n";
-    cout << "7. Выйти\n";
+    cout << "0. Выйти\n";
 }
 
 int main()
@@ -162,7 +160,7 @@ int main()
         case 6:
             vec.showAll();
             break;
-        case 7:
+        case 0:
             return 0;
         default:
             cerr << "Ошибка: неверный выбор" << endl;
