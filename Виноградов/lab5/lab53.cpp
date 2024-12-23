@@ -38,7 +38,7 @@ public:
     }
 };
 
-void printMenu() {
+void showMenu() {
     cout << "Выберите действие:\n";
     cout << "1. Создать треугольник из строки\n";
     cout << "2. Показать информацию о треугольнике\n";
@@ -53,7 +53,7 @@ int main() {
     string str;
 
     while (true) {
-        printMenu();
+        showMenu();
         cin >> choice;
 
         switch (choice) {

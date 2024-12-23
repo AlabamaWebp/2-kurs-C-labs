@@ -20,7 +20,7 @@ class LinkedList
 private:
     Node *head;
     int size;
-    const int MAX_SIZE = 100;
+    const int max_size = 100;
 
     void checkIndex(int index)
     {
@@ -62,7 +62,7 @@ public:
 
     void add(int value)
     {
-        if (size >= MAX_SIZE)
+        if (size >= max_size)
         {
             cerr << "Ошибка: попытка добавить элемент в список больше максимального размера" << endl;
             throw logic_error("Максимальный размер списка превышен");
@@ -130,7 +130,7 @@ public:
     }
 };
 
-void printMenu()
+void showMenu()
 {
     cout << "Выберите действие:\n";
     cout << "1. Добавить элемент\n";
@@ -150,7 +150,7 @@ int main()
 
     while (true)
     {
-        printMenu();
+        showMenu();
         cin >> choice;
 
         switch (choice)

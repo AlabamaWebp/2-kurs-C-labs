@@ -11,14 +11,12 @@ class Vector
 private:
     int *data;
     int size;
-    const int MAX_SIZE = 100;
+    const int max_size = 100;
 
     void checkIndex(int index)
     {
         if (index < 0 || index >= size)
-        {
             throw logic_error("Индекс вне диапазона");
-        }
     }
 
 public:
@@ -46,7 +44,7 @@ public:
 
     void add(int value)
     {
-        if ((size + 1) >= MAX_SIZE)
+        if ((size + 1) >= max_size)
             throw logic_error("Максимальный размер вектора превышен");
         data[size++] = value;
     }
@@ -54,7 +52,6 @@ public:
     void showAll()
     {
         for (int i = 0; i < size; i++)
-
             cout << data[i] << " ";
         cout << endl;
     }
@@ -62,27 +59,21 @@ public:
     void removeFirst()
     {
         if (size == 0)
-        {
             throw logic_error("Вектор пуст");
-        }
         for (int i = 1; i < size; ++i)
-        {
             data[i - 1] = data[i];
-        }
         --size;
     }
 
     void removeLast()
     {
         if (size == 0)
-        {
             throw logic_error("Вектор пуст");
-        }
         --size;
     }
 };
 
-void printMenu()
+void showMenu()
 {
     cout << "Выберите действие:\n";
     cout << "1. Добавить элемент\n";
@@ -102,14 +93,12 @@ int main()
 
     while (true)
     {
-        printMenu();
+        showMenu();
         cin >> choice;
 
         switch (choice)
         {
         case 1:
-            // cout << "Введите значение для добавления: ";
-            // cin >> value;
             try
             {
                 vec.add(get_rand());

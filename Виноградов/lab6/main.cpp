@@ -2,7 +2,7 @@
 #include "Matrix.h"
 using namespace std;
 
-void printMenu() {
+void showMenu() {
     cout << "1. Транспонировать матрицу" << endl;
     cout << "2. Повернуть матрицу" << endl;
     cout << "3. Сортировать строки матрицы" << endl;
@@ -17,7 +17,7 @@ int main() {
     int choice;
 
     do {
-        printMenu();
+        showMenu();
         cout << "Выберите действие: ";
         cin >> choice;
 
