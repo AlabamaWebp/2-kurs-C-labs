@@ -723,7 +723,6 @@ void showMathObjectMenu()
 void showFigureMenu(int choice)
 {
     Shape *one;
-    // int choice55;
     switch (choice)
     {
     case 1:
