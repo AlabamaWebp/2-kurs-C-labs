@@ -95,65 +95,43 @@ int main()
     {
         showMenu();
         cin >> choice;
-
-        switch (choice)
+        try
         {
-        case 1:
-            try
+            switch (choice)
             {
+            case 1:
                 vec.add(get_rand());
                 cout << "Элемент добавлен.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 2:
-            try
-            {
+                break;
+            case 2:
                 vec.removeFirst();
                 cout << "Элемент удалён из начала.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 3:
-            try
-            {
+                break;
+            case 3:
                 vec.removeLast();
                 cout << "Элемент удалён с конца.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 4:
-            cout << "Введите индекс для получения элемента: ";
-            cin >> index;
-            try
-            {
+                break;
+            case 4:
+                cout << "Введите индекс для получения элемента: ";
+                cin >> index;
                 cout << "Элемент с индексом " << index << ": " << vec.get(index) << endl;
+                break;
+            case 5:
+                cout << "Текущий размер вектора: " << vec.getSize() << endl;
+                break;
+            case 6:
+                vec.showAll();
+                break;
+            case 0:
+                return 0;
+            default:
+                cerr << "Ошибка: неверный выбор" << endl;
+                break;
             }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 5:
-            cout << "Текущий размер вектора: " << vec.getSize() << endl;
-            break;
-        case 6:
-            vec.showAll();
-            break;
-        case 0:
-            return 0;
-        default:
-            cerr << "Ошибка: неверный выбор" << endl;
-            break;
+        }
+        catch (const exception &e)
+        {
+            cerr << e.what() << endl;
         }
     }
 
