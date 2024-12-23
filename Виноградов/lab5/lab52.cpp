@@ -11,8 +11,7 @@ class Node
 public:
     int data;
     Node *next;
-
-    Node(int value) : data(value), next(nullptr) {}
+    Node(int d) : data(d), next(nullptr) {}
 };
 
 class LinkedList
@@ -139,7 +138,7 @@ void showMenu()
     cout << "4. Получить элемент по индексу\n";
     cout << "5. Вывести размер списка\n";
     cout << "6. Вывести все элементы\n";
-    cout << "7. Выйти\n";
+    cout << "0. Выйти\n";
 }
 
 int main()
@@ -152,65 +151,43 @@ int main()
     {
         showMenu();
         cin >> choice;
-
-        switch (choice)
+        try
         {
-        case 1:
-            try
+            switch (choice)
             {
+            case 1:
                 list.add(get_rand());
                 cout << "Элемент добавлен.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 2:
-            try
-            {
+                break;
+            case 2:
                 list.removeFirst();
                 cout << "Элемент удалён из начала.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 3:
-            try
-            {
+                break;
+            case 3:
                 list.removeLast();
                 cout << "Элемент удалён с конца.\n";
-            }
-            catch (const exception &e)
-            {
-                cerr << e.what() << endl;
-            }
-            break;
-        case 4:
-            cout << "Введите индекс для получения элемента: ";
-            cin >> index;
-            try
-            {
+                break;
+            case 4:
+                cout << "Введите индекс для получения элемента: ";
+                cin >> index;
                 cout << "Элемент с индексом " << index << ": " << list.get(index) << endl;
+                break;
+            case 5:
+                cout << "Текущий размер списка: " << list.getSize() << endl;
+                break;
+            case 6:
+                list.showAll();
+                break;
+            case 0:
+                return 0;
+            default:
+                cerr << "Ошибка: неверный выбор\n";
+                break;
             }
             catch (const exception &e)
             {
                 cerr << e.what() << endl;
             }
-            break;
-        case 5:
-            cout << "Текущий размер списка: " << list.getSize() << endl;
-            break;
-        case 6:
-            list.showAll();
-            break;
-        case 7:
-            return 0;
-        default:
-            cerr << "Ошибка: неверный выбор\n";
-            break;
         }
     }
 
