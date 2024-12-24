@@ -70,13 +70,11 @@ int main()
 {
     Triangle *t = nullptr;
     int choice;
-    double a, b, c;
     string str;
     while (true)
     {
         showMenu(t);
         cin >> choice;
-
         try
         {
             switch (choice)

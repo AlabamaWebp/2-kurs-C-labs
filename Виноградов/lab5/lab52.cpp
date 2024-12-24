@@ -181,10 +181,10 @@ int main()
                 cerr << "Ошибка: неверный выбор\n";
                 break;
             }
-            catch (exception &e)
-            {
-                cerr << e.what() << endl;
-            }
+        }
+        catch (exception &e)
+        {
+            cerr << e.what() << endl;
         }
     }
 
