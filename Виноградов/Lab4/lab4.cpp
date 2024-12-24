@@ -234,12 +234,12 @@ public:
             data[i] = get_rand();
         }
     }
-    Vector(double x, double y, double z)
+    Vector(double a, double b, double c)
     {
         data = new double[size];
-        data[0] = x;
-        data[1] = y;
-        data[2] = z;
+        data[0] = a;
+        data[1] = b;
+        data[2] = c;
     }
     ~Vector()
     {
@@ -269,7 +269,7 @@ public:
     MathObject *multiply(MathObject &obj) override
     {
         Vector &other = dynamic_cast<Vector &>(obj);
-        
+
         return new Vector(
             data[1] * other.data[2] - data[2] * other.data[1],
             data[2] * other.data[0] - data[0] * other.data[2],
@@ -402,49 +402,45 @@ public:
 // TODO Shape ~
 class Shape
 {
+protected:
+    double x, y, rotation = 0;
 public:
-    virtual void move(double dx, double dy) = 0;
-    virtual void rotate(double angle) = 0;
+    void move(double dx, double dy)
+    {
+        x += dx;
+        y += dy;
+    };
+    void rotate(double angle)
+    {
+        rotation += angle;
+    }
     virtual double area() = 0;
     virtual double perimeter() = 0;
     virtual void display() = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TODO Triangle по 3 сторонам формулу
+// TODO Triangle
 class Triangle : public Shape
 {
-    double base, height;
-    double x, y;
-    double rotation;
+    double side1, side2, side3;
 
 public:
-    Triangle() : base(get_rand()), height(get_rand()), x(0), y(0), rotation(0) {}
-
-    void move(double dx, double dy) override
-    {
-        x += dx;
-        y += dy;
-    }
-
-    void rotate(double angle) override
-    {
-        rotation += angle;
-    }
+    Triangle() : side1(get_rand()), side2(get_rand()), side3(get_rand()) {}
 
     double area() override
     {
-        return (base * height) / 2;
+        double p = perimeter();
+        return sqrt(p*(p-side1)*(p-side2)*(p-side3));
     }
 
     double perimeter() override
     {
-        double side = sqrt((base / 2) * (base / 2) + height * height);
-        return base + 2 * side;
+        return side1 + side2 + side3;
     }
 
     void display() override
     {
-        cout << "Треугольник: База = " << base << ", Высота = " << height
+        cout << "Треугольник: сторона 1 = " << side1 << ", сторона 2 = " << side2 << ", сторона 3 = " << side3
              << ", x = " << x << ", y = " << y
              << ", угол = " << rotation << " градусов\n";
     }
@@ -454,22 +450,9 @@ public:
 class Rectangle : public Shape
 {
     double width, height;
-    double x, y;
-    double rotation;
 
 public:
-    Rectangle() : width(get_rand()), height(get_rand()), x(0), y(0), rotation(0) {}
-
-    void move(double dx, double dy) override
-    {
-        x += dx;
-        y += dy;
-    }
-
-    void rotate(double angle) override
-    {
-        rotation += angle;
-    }
+    Rectangle() : width(get_rand()), height(get_rand()) {}
 
     double area() override
     {
@@ -493,22 +476,9 @@ public:
 class Rhombus : public Shape
 {
     double diagonal1, diagonal2;
-    double x, y;
-    double rotation;
 
 public:
-    Rhombus() : diagonal1(get_rand()), diagonal2(get_rand()), x(0), y(0), rotation(0) {}
-
-    void move(double dx, double dy) override
-    {
-        x += dx;
-        y += dy;
-    }
-
-    void rotate(double angle) override
-    {
-        rotation += angle;
-    }
+    Rhombus() : diagonal1(get_rand()), diagonal2(get_rand()) {}
 
     double area() override
     {
@@ -533,18 +503,7 @@ public:
 class Ellipse : public Shape
 {
 public:
-    Ellipse() : majorAxis(get_rand()), minorAxis(get_rand()), x(0), y(0), rotation(0) {}
-
-    void move(double dx, double dy) override
-    {
-        x += dx;
-        y += dy;
-    }
-
-    void rotate(double angle) override
-    {
-        rotation += angle;
-    }
+    Ellipse() : majorAxis(get_rand()), minorAxis(get_rand()) {}
 
     double area() override
     {
@@ -565,49 +524,36 @@ public:
 
 private:
     double majorAxis, minorAxis;
-    double x, y;
-    double rotation;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TODO Trapezoid проеврка на существование
-class Trapezoid : public Shape 
+// TODO Trapezoid
+class Trapezoid : public Shape
 {
+
+private:
+    double base1, base2, height;
 public:
-    Trapezoid() : base1(get_rand()), base2(get_rand()), height(get_rand()), side1(get_rand()), side2(get_rand()), x(0), y(0), rotation(0) {}
-
-    void move(double dx, double dy) override
-    {
-        x += dx;
-        y += dy;
-    }
-
-    void rotate(double angle) override
-    {
-        rotation += angle;
-    }
+    Trapezoid() : base1(get_rand()), base2(get_rand()), height(get_rand()) {}
 
     double area() override
     {
-        return (base1 + base2) * height / 2;
+         return ((base1 + base2) / 2) * height;
     }
 
     double perimeter() override
     {
-        return base1 + base2 + side1 + side2;
+        double tmp = abs(base1 - base2) / 2;
+        double side = sqrt(height * height + tmp * tmp);
+        return side + side + base1 + base2;
     }
 
     void display() override
     {
         cout << "Трапеция: верхняя основа = " << base1 << ", нижняя основа = " << base2
-             << ", Высота = " << height << ", левая сторона = " << side1 << ", правая сторона = " << side2
+             << ", Высота = " << height
              << ", x = " << x << ", y = " << y
              << ", угол = " << rotation << " градусов\n";
     }
-
-private:
-    double base1, base2, height, side1, side2;
-    double x, y;
-    double rotation;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -749,8 +695,8 @@ void showFigureMenu(int choice)
         cout << "Выберите операцию:\n";
         cout << "1. Случайное перемещение\n";
         cout << "2. Случайный поворот\n";
-        cout << "3. Нахождение площади\n";
-        cout << "4. Нахождение периметра\n";
+        cout << "3. Нахождение периметра\n";
+        cout << "4. Нахождение площади\n";
         cout << "5. Выход\n";
         cout << "Ваш выбор: ";
         int operationChoice;
