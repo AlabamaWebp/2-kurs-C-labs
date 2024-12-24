@@ -25,7 +25,6 @@ private:
     {
         if (index < 0 || index >= size)
         {
-            cerr << "Ошибка: индекс вне диапазона" << endl;
             throw logic_error("Индекс вне диапазона");
         }
     }
@@ -83,7 +82,6 @@ public:
     {
         if (size == 0)
         {
-            cerr << "Ошибка: попытка удалить элемент из пустого списка" << endl;
             throw logic_error("Список пуст");
         }
         Node *temp = head;
@@ -96,7 +94,6 @@ public:
     {
         if (size == 0)
         {
-            // cerr << "Ошибка: попытка удалить элемент из пустого списка" << endl;
             throw logic_error("Список пуст");
         }
         if (size == 1)

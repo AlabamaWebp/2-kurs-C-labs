@@ -430,10 +430,10 @@ public:
             side1 = get_rand();
             side2 = get_rand();
             side3 = get_rand();
-        } while (is_valid());
+        } while (!is_valid());
     }
     bool is_valid() {
-        return ((side1 + side2) < side3) && ((side3 + side2) < side1) && ((side1 + side3) < side2);
+        return ((side1 + side2) > side3) && ((side3 + side2) > side1) && ((side1 + side3) > side2);
     }
     double area() override
     {

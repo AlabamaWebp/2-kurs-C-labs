@@ -19,12 +19,6 @@ void sort(int *mas, int &size)
             }
         if (id != i)
             swap(mas[i], mas[id]);
-        for (int i = 0; i < size; i++)
-        {
-            cout << mas[i] << " ";
-        }
-            
-        cout <<  endl;
     }
 }
 void Matrix::deleteData()
@@ -81,7 +75,7 @@ void Matrix::rotate()
             rotated[i][j] = data[rows - 1 - j][i];
         }
     }
-    swap(rows, cols);
+    // swap(rows, cols);
     Matrix::deleteData();
     data = rotated;
 }
@@ -92,6 +86,7 @@ void Matrix::sortRows()
     {
         sort(data[i], cols);
     }
+    Matrix::print();
 }
 
 void Matrix::reverseColumns()

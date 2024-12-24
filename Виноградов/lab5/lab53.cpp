@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <sstream>
 using namespace std;
 
 class Triangle
@@ -10,14 +11,26 @@ private:
     void validateSides()
     {
         if (a <= 0 || b <= 0 || c <= 0)
-        {
-            cerr << "Ошибка: сторона должна быть > 0" << endl;
             throw invalid_argument("Стороны должны быть положительными числами");
-        }
-        if (a + b <= c || a + c <= b || b + c <= a)
-        {
-            cerr << "Ошибка: невозможно создать треугольник с такими сторонами" << endl;
+        if (!((a + b) > c && (a + c) > b && (b + c) > a))
             throw invalid_argument("Несуществующий треугольник");
+    }
+    void transformate(string &row)
+    {
+        try
+        {
+            stringstream s(row);
+            string s2;
+            getline(s, s2, ',');
+            a = stod(s2);
+            getline(s, s2, ',');
+            b = stod(s2);
+            getline(s, s2, ',');
+            c = stod(s2);
+        }
+        catch (exception &e)
+        {
+            throw invalid_argument("Неверный ввод");
         }
     }
 
@@ -36,11 +49,7 @@ public:
     Triangle(string &str)
     {
         cout << str << endl;
-        if (sscanf(str.c_str(), "%lf,%lf,%lf", &a, &b, &c) != 3)
-        {
-            cerr << "Ошибка: неправильный формат строки" << endl;
-            throw invalid_argument("Неправильный формат строки");
-        }
+        transformate(str);
         validateSides();
     }
 };
@@ -49,7 +58,8 @@ void showMenu(Triangle *t)
 {
     cout << "Выберите действие:\n";
     cout << "1. Создать треугольник из строки\n";
-    if (t != nullptr) {
+    if (t != nullptr)
+    {
         cout << "2. Показать информацию о треугольнике\n";
         cout << "3. Вычислить площадь треугольника\n";
     }
