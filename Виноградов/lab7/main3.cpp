@@ -44,7 +44,7 @@ public:
     task3() : m(Matrix()) {
         m.print();
     }
-    int findLongest(auto &row)
+    int findLongest(vector<int> &row)
     {
         if (row.empty())
             return 0;
@@ -52,12 +52,10 @@ public:
         int max_length = 1;
         int current_length = 1;
 
-        for (size_t i = 1; i < row.size(); ++i)
+        for (int i = 1; i < row.size(); ++i)
         {
             if (row[i] == row[i - 1])
-            {
                 ++current_length;
-            }
             else
             {
                 max_length = max(max_length, current_length);
