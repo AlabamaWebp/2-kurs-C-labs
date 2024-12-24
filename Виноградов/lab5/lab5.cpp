@@ -35,7 +35,7 @@ public:
     {
         return size;
     }
-
+ 
     int get(int index)
     {
         checkIndex(index);
@@ -51,9 +51,14 @@ public:
 
     void showAll()
     {
-        for (int i = 0; i < size; i++)
-            cout << data[i] << " ";
-        cout << endl;
+        if (size == 0) {
+            cout << "Список пуст" << endl;
+        }
+        else {
+            for (int i = 0; i < size; i++)
+                cout << data[i] << " ";
+            cout << endl;
+        }
     }
 
     void removeFirst()

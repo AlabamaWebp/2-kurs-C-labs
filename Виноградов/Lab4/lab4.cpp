@@ -234,12 +234,12 @@ public:
             data[i] = get_rand();
         }
     }
-    Vector(double a, double b, double c)
+    Vector(double x, double y, double z)
     {
         data = new double[size];
-        data[0] = a;
-        data[1] = b;
-        data[2] = c;
+        data[0] = x;
+        data[1] = y;
+        data[2] = z;
     }
     ~Vector()
     {
@@ -410,7 +410,7 @@ public:
     virtual void display() = 0;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TODO Triangle
+// TODO Triangle по 3 сторонам формулу
 class Triangle : public Shape
 {
     double base, height;
@@ -569,8 +569,8 @@ private:
     double rotation;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TODO Trapezoid
-class Trapezoid : public Shape
+// TODO Trapezoid проеврка на существование
+class Trapezoid : public Shape 
 {
 public:
     Trapezoid() : base1(get_rand()), base2(get_rand()), height(get_rand()), side1(get_rand()), side2(get_rand()), x(0), y(0), rotation(0) {}

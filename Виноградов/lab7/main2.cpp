@@ -6,7 +6,7 @@
 using namespace std;
 void output(vector<double> arr)
 {
-    for (const auto &elem : arr)
+    for (double &elem : arr)
     {
         cout << elem << " ";
     }
