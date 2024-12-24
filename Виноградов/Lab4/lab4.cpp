@@ -1,8 +1,11 @@
 #include <iostream>
-#include <string>
 #include <cmath>
-
 using namespace std;
+
+int get_rand()
+{
+    return rand() % 50 + 1;
+}
 // TODO MathObject
 class MathObject
 {
@@ -13,10 +16,6 @@ public:
     virtual MathObject *multiply(double) = 0;
     virtual string toString() = 0;
 };
-int get_rand()
-{
-    return rand() % 50 + 1;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO Matrix
