@@ -425,8 +425,16 @@ class Triangle : public Shape
     double side1, side2, side3;
 
 public:
-    Triangle() : side1(get_rand()), side2(get_rand()), side3(get_rand()) {}
-
+    Triangle() {
+        do {
+            side1 = get_rand();
+            side2 = get_rand();
+            side3 = get_rand();
+        } while (is_valid());
+    }
+    bool is_valid() {
+        return ((side1 + side2) < side3) && ((side3 + side2) < side1) && ((side1 + side3) < side2);
+    }
     double area() override
     {
         double p = perimeter();
