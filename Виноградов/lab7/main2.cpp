@@ -19,8 +19,7 @@ int main()
     generate(arr.begin(), arr.end(), []()
              { return (rand() % 20 - 10) / 1.0; });
 
-    auto pos_elem = find_if(arr.begin(), arr.end(), [](double x)
-                            { return x > 0; });
+    auto pos_elem = find_if(arr.begin(), arr.end(), [](double x){ return x > 0; });
     double sum = accumulate(pos_elem + 1, arr.end(), 0.0);
     cout << "Сумма элементов после первого положительного: " << sum << endl;
 
