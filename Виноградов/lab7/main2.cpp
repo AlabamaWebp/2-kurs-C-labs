@@ -8,11 +8,12 @@ using namespace std;
 class task2
 {
     const int N = 10;
-    vector<double> arr(N);
+    vector<double> arr;
 
 public:
     task2()
     {
+        arr = vector<double>(N);
         generate(arr.begin(), arr.end(), []()
                  { return (rand() % 20 - 10) / 1.0; });
         output();
@@ -37,12 +38,14 @@ public:
         partition(arr.begin(), arr.end(), [a, b](double x)
                   { return x >= a && x <= b; });
     }
-} int main()
+};
+int main()
 {
     task2 t;
-    cout << "Сумма элементов после первого положительного: " << t.sum << endl;
+    cout << "Сумма элементов после первого положительного: " << t.sum() << endl;
+    t.rebase();
     cout << "Преобразованный массив: ";
-    output(arr);
+    t.output();
     return 0;
 }
 // сумму элементов массива, расположенных после первого положительного элемента. Преобразовать массив таким образом,
