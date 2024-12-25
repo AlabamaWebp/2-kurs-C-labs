@@ -9,7 +9,6 @@ class task2
 {
     const int N = 10;
     vector<double> arr;
-
 public:
     task2()
     {

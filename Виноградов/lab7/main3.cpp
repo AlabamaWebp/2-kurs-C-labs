@@ -85,8 +85,13 @@ public:
     {
         if (row_indices.size() > 1)
             cout << "Строки с самой длинной серией одинаковых элементов: ";
+        else if (row_indices.size() == m.rows) {
+            cout << "Нет строки с самой длинной серией одинаковых элементов: ";
+            return;
+        }
         else
             cout << "Строка с самой длинной серией одинаковых элементов: ";
+
         for (int index : row_indices)
             cout << index + 1 << " ";
         cout << endl;

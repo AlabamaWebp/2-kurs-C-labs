@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <sstream>
+#include <algorithm> 
 using namespace std;
 
 class Triangle
@@ -21,11 +22,13 @@ private:
         {
             stringstream s(row);
             string s2;
+            if (count(row.begin(), row.end(), ',') != 2)
+                throw invalid_argument("");
             getline(s, s2, ',');
             a = stod(s2);
             getline(s, s2, ',');
             b = stod(s2);
-            getline(s, s2, ',');
+            getline(s, s2);
             c = stod(s2);
         }
         catch (exception &e)
@@ -48,7 +51,6 @@ public:
 
     Triangle(string &str)
     {
-        cout << str << endl;
         transformate(str);
         validateSides();
     }
@@ -97,6 +99,7 @@ int main()
                 break;
             case 0:
                 delete t;
+                t = nullptr;
                 return 0;
             default:
                 cerr << "Ошибка: неверный выбор\n";
