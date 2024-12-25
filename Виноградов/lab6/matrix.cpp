@@ -1,7 +1,5 @@
-// Matrix.cpp
 #include <iostream>
 #include "Matrix.h"
-
 using namespace std;
 
 void sort(int *mas, int &size)
@@ -75,7 +73,7 @@ void Matrix::rotate()
             rotated[i][j] = data[rows - 1 - j][i];
         }
     }
-    // swap(rows, cols);
+    swap(rows, cols);
     Matrix::deleteData();
     data = rotated;
 }

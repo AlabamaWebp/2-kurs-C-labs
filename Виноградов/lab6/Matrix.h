@@ -1,7 +1,3 @@
-// Matrix.h
-#ifndef MATRIX_H
-#define MATRIX_H
-
 class Matrix {
 private:
     int rows;
@@ -18,5 +14,3 @@ public:
     void reverseColumns();
     void print();
 };
-
-#endif // MATRIX_H
