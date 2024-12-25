@@ -2,8 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
-#include <ctime>
-
 using namespace std;
 
 class Matrix
@@ -24,7 +22,7 @@ public:
     void print()
     {
         cout << "Матрица:" << endl;
-        for (const auto &row : data)
+        for (auto &row : data)
         {
             for (int num : row)
             {
@@ -51,7 +49,6 @@ public:
             swap(min_elem, max_elem);
         return accumulate(min_elem + 1, max_elem, 1.0, multiplies<double>());
     }
-    /// task2
     static double sumAfterCondition(vector<double> &arr)
     {
         auto pos_elem = find_if(arr.begin(), arr.end(), [](double x)
@@ -71,7 +68,6 @@ public:
             cout << num << " ";
         cout << endl;
     }
-    // task3
     static vector<int> matixFindMaxInRows(Matrix m)
     {
         vector<int> row_indices;
@@ -117,7 +113,6 @@ private:
 };
 int main()
 {
-    srand(time(0));
     int N = 10;
     vector<double> arr = vector<double>(N);
     cout << "Задание 1" << endl;
