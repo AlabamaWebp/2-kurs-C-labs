@@ -139,7 +139,7 @@ void runTask(string filename1)
 
 int main()
 {
-    string input_file = "task22.csv";
+    string input_file = "si25_eliseev_task2.csv";
     runTask(input_file);
     return 0;
 }
